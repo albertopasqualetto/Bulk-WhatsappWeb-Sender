@@ -1,0 +1,7 @@
+{
+  "main": "./main.js",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.16.6"
+  }
+}
