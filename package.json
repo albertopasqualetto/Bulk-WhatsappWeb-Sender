@@ -8,6 +8,13 @@
   "description": "A project which permits people to send WhatsApp messages in bulk trough WhatsApp Web with a nice CLI interface",
   "repository": "github:albertopasqualetto/Bulk-WhatsappWeb-Sender/",
   "bugs": "https://github.com/albertopasqualetto/Bulk-WhatsappWeb-Sender/issues",
+  "keywords": [
+    "whatsapp",
+    "whatsapp-web",
+    "bulk-whatsapp-messaging",
+    "whatsapp-broadcast",
+    "node"
+  ],
   "license": "Apache-2.0",
   "main": "./index.js",
   "dependencies": {
