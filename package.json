@@ -1,11 +1,22 @@
 {
-  "main": "./main.js",
+  "name": "bulk-whatsappweb-sender",
+  "version": "1.0.0",
+  "author": {
+    "name": "Alberto Pasqualetto",
+    "email": "39854348+albertopasqualetto@users.noreply.github.com"
+  },
+  "description": "A project which permits people to send WhatsApp messages in bulk trough WhatsApp Web with a nice CLI interface",
+  "repository": "github:albertopasqualetto/Bulk-WhatsappWeb-Sender/",
+  "bugs": "https://github.com/albertopasqualetto/Bulk-WhatsappWeb-Sender/issues",
+  "license": "Apache-2.0",
+  "main": "./index.js",
   "dependencies": {
     "inquirer": "^8.2.3",
     "inquirer-file-tree-selection-prompt": "^1.0.19",
     "qrcode-terminal": "^0.12.0",
-    "run-series": "^1.1.9",
-    "run-waterfall": "^1.1.7",
     "whatsapp-web.js": "^1.16.6"
+  },
+  "devDependencies": {
+    "pkg": "^5.6.0"
   }
 }

@@ -11,7 +11,7 @@ function askInput(callback){
             {
                 type: 'file-tree-selection',
                 name: 'numbers',
-                message: "Select the file with telephone numbers (They must be written with county code as a prefix and comma(,) separated) (Confirm with \'Enter\'):",	//Implement sending all media in a folder
+                message: "Select the file with telephone numbers (They must be written with county code as a prefix and comma(,) separated) (Confirm with \'Enter\'):",
             },
             {
                 type: 'input',
@@ -29,7 +29,7 @@ function askInput(callback){
             {
                 type: 'file-tree-selection',
                 name: 'media',
-                message: "Select which files/media you want to send (Do not select entire folders) (Select with \'Space\' and confirm with \'Enter\'):",	//Implement sending all media in a folder
+                message: "Select which files/media you want to send (Do not select entire folders) (Select with \'Space\' and confirm with \'Enter\'):",	//TODO Implement sending all media in a folder
                 multiple: true,
             },
         ])
