@@ -18,6 +18,7 @@
   "license": "Apache-2.0",
   "main": "./index.js",
   "dependencies": {
+    "get-google-chrome-path": "github:albertopasqualetto/get-google-chrome-path",
     "inquirer": "^8.2.3",
     "inquirer-file-tree-selection-prompt": "^1.0.19",
     "qrcode-terminal": "^0.12.0",

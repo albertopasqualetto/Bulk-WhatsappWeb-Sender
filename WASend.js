@@ -12,9 +12,10 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
         authStrategy: new NoAuth(),
         puppeteer: {
             headless: true,
-            //executablePath: './.local-chromium/win64-982053/chrome-win/chrome.exe'      //for pkg output win
-            //executablePath: './.local-chromium/linux-982053/chrome-linux/chrome',		//for pkg output linux
-            //executablePath: '/usr/bin/google-chrome'  //TODO add workaround to send video https://wwebjs.dev/guide/handling-attachments.html#caveat-for-sending-videos-and-gifs
+            executablePath: pupPath,
+            //executablePath: './.local-chromium/win64-982053/chrome-win/chrome.exe',   //for pkg output win
+            //executablePath: './.local-chromium/linux-982053/chrome-linux/chrome',     //for pkg output linux
+            //executablePath: '/usr/bin/google-chrome',                                 //for sending videos from chrome caveat //TODO can I use Edge?
         }
     });
 
@@ -59,7 +60,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
                     client.sendMessage(chatId, MessageMedia.fromFilePath(mediaPath));
                 });
                 
-                console.log('SENDING MESSAGE TO '+numbersArr[i]);
+                console.log('SENDING MESSAGE TO '+numbersArr[i]);   //TODO write log once message is sent
                 
                 //TODO how much delay?
                 //delay to try avoiding ban

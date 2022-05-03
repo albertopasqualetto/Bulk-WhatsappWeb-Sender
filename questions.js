@@ -29,7 +29,7 @@ function askInput(callback){
             {
                 type: 'file-tree-selection',
                 name: 'media',
-                message: "Select which files/media you want to send (Do not select entire folders) (Select with \'Space\' and confirm with \'Enter\'):",	//TODO Implement sending all media in a folder
+                message: "Select which media/files you want to send (Do not select entire folders) (Select with \'Space\' and confirm with \'Enter\'):",	//TODO Implement sending all media in a folder  //TODO implement sending gifs (by converting to video first)
                 multiple: true,
             },
         ])
