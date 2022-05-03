@@ -16,7 +16,7 @@ function askInput(callback){
             {
                 type: 'input',
                 name: 'message',
-                message: "Insert the text you want to send (Then press Enter):",
+                message: "Insert the text you want to send (Formatting: *bold*, _italic_, ~strikethrough~, ```monospace```; you can also add emojis)\n(Then press \'Enter\'):",
                 validate(input) {
                     if (/\S/g.test(input))
                         return true;
