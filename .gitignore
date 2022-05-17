@@ -109,3 +109,6 @@ dist
 # Project files
 build/
 numbers.txt
+
+package-lock.json
+*.exe
