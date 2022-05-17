@@ -11,7 +11,7 @@ function askInput(callback){
             {
                 type: 'file-tree-selection',
                 name: 'numbers',
-                message: "Select the file with telephone numbers (They must be written with county code as a prefix and comma(,) separated) (Confirm with \'Enter\'):",
+                message: "Select the file with telephone numbers (They must be written with country code as a prefix and comma(,) separated) (Confirm with \'Enter\'):",
             },
             {
                 type: 'input',
