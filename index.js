@@ -10,7 +10,7 @@ global.pupPath='';
 program
 	.name('Bulk-WhatsappWeb-Sender')
 	.description('Send bulk messages to a telephone number list')
-	.version('1.1.1');
+	.version('1.2.0');
 
 program
 	/* .option('-n, --numbers')		//TODO use args options to bypass interaction
