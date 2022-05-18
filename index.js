@@ -17,10 +17,11 @@ program
 	.option('-w, --write-message')
 	.option('-r, --read-message')
 	.option('-f, --files') */
-	.option('-l, --local-chromium', 'use local Chromium executable instead of intalled Chrome', false);
+	.option('-la, --local-auth', 'use LocalAuth authentication mode instead of NoAuth (keep your account logged in)', false)
+	.option('-lc, --local-chromium', 'use local Chromium executable instead of installed Chrome', false);
 
 program.parse();
-var options= program.opts();
+global.options= program.opts();
 
 
 // TODO download chromium only if needed

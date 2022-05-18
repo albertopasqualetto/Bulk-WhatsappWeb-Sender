@@ -1,6 +1,6 @@
 module.exports.send = SendMessages
 
-const { Client, NoAuth, MessageMedia } = require('whatsapp-web.js');
+const { Client, LocalAuth, NoAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const path = require('path');
@@ -9,7 +9,7 @@ const fs = require('fs');
 //Whatsapp magic
 function SendMessages(numbersFile, messageToSend, mediaToSend){
     const client = new Client({
-        authStrategy: new NoAuth(),
+        authStrategy: options.localAuth ? new LocalAuth() : new NoAuth(),
         puppeteer: {
             headless: true,
             executablePath: pupPath,
