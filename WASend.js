@@ -32,51 +32,59 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
     });
 
 
-    client.on('ready', () => {
+    client.on('ready', async () => {
         console.log('WWEB READY');
-        client.sendPresenceAvailable();
+        await client.sendPresenceAvailable();
 
+        let numbersArr;
         try{
             //const numbers = fs.readFileSync(path.resolve('numbers.txt'));
             const numbers = fs.readFileSync(numbersFile);
-
-            var numbersArr = numbers.toString().split(",");
-            for(i in numbersArr) {
-                if(numbersArr[i]=='')
-                    continue;
-                var sanitized_number = numbersArr[i].toString().replace(/[- )(+]/g, "");	//numbers already with a prefix	//TODO add numbers without a prefix
-                var chatId=sanitized_number+'@c.us';	//'@c.us' represents a person's userdId
-
-                if(!client.isRegisteredUser(chatId)){
-                    console.timeLog(numbersArr[i]+' IS NOT ON WHATSAPP');
-                    continue;
-                }
-
-                //if message exists
-                if(messageToSend!='')
-                    client.sendMessage(chatId, messageToSend);
-                //if media exists
-                (mediaToSend).forEach(mediaPath => {
-                    client.sendMessage(chatId, MessageMedia.fromFilePath(mediaPath));
-                });
-                
-                console.log('SENDING MESSAGE TO '+numbersArr[i]);   //TODO write log once message is sent
-                
-                //TODO how much delay?
-                //delay to try avoiding ban
-                new Promise(resolve => setTimeout(resolve, randBetween(500,4500)))	//in ms
-            }
-            client.sendPresenceUnavailable();
-            console.log('ALL DONE!');
-
+            numbersArr = numbers.toString().split(",");
         } catch(err){
             console.error(err);
         }
+
+        for(let number of numbersArr) {
+            if(number=='')
+                continue;
+            else{
+                let sanitized_number = number.toString().replace(/[- )(+]/g, "");	//numbers already with a prefix	//TODO add numbers without a prefix
+
+                await sendEverything(client, sanitized_number+'@c.us', messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
+
+                //delay to try avoiding ban
+                //TODO how much delay?
+                await new Promise((resolve, reject) => setTimeout(resolve, randBetween(500, 9000)));	//in ms
+                //await new Promise((resolve, reject) => setTimeout(resolve, 5000));	//in ms
+            }
+        }
+        await client.sendPresenceUnavailable();
+        await client.destroy(); //TODO why do I need this?
+        console.log('ALL DONE!');
     });
 }
 
 
-function randBetween(min, max) {  
+async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
+    //if number is not on Whatsapp
+    if(! (await WWebClient.isRegisteredUser(chatId))){
+        console.log(chatId+': NOT ON WHATSAPP');
+    }
+    else{
+        //if message exists
+        if(messageToSend!='')
+            await WWebClient.sendMessage(chatId, messageToSend);
+        //if media exists
+        for(let mediaPath of mediaToSend)
+            await WWebClient.sendMessage(chatId, MessageMedia.fromFilePath(mediaPath));
+
+        console.log(chatId+': SENT');
+    }
+}
+
+
+function randBetween(min, max) {
 	return Math.floor(
 	  	Math.random() * (max - min + 1) + min
 	)
