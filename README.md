@@ -6,7 +6,7 @@ This tool permits people to send WhatsApp messages in bulk trough WhatsApp Web w
 
 ## How to
 
-Download your relative OS .zip, decompress it, open a terminal in the folder and start the program (`index.exe` in Windows and `.\index` in Linux; in Linux you may have to give execute permissions).
+Download your relative OS .zip, decompress it, open a terminal in the folder and start the program (`index.exe` in Windows and `./index` in Linux; in Linux you may have to give execute permissions).
 
 :x: It is not able to send gifs and to send all the content of a folder.
 
