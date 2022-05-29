@@ -1,6 +1,4 @@
-# Bulk-WhatsappWeb-Sender
-
-This tool permits people to send WhatsApp messages in bulk trough WhatsApp Web with a nice CLI interface.
+This tool permits people to send WhatsApp messages in bulk through WhatsApp Web with a nice CLI interface.
 
 **This software is not completely reliable and tested!**
 
