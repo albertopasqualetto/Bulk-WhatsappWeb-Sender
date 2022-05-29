@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 
 //Whatsapp magic
-function SendMessages(numbersFile, messageToSend, mediaToSend){
+function SendMessages(numbersFile, messageFiles, mediaToSend){
     const client = new Client({
         authStrategy: options.localAuth ? new LocalAuth() : new NoAuth(),
         puppeteer: {
@@ -51,7 +51,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
             else{
                 let sanitized_number = number.toString().replace(/[- )(+]/g, "");	//numbers already with a prefix	//TODO add numbers without a prefix
 
-                await sendEverything(client, sanitized_number+'@c.us', messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
+                await sendEverything(client, sanitized_number+'@c.us', messageFiles, mediaToSend);   //'@c.us' represents a person's userdId
 
                 //delay to try avoiding ban
                 //TODO how much delay?
@@ -66,15 +66,18 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
 }
 
 
-async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
+async function sendEverything(WWebClient, chatId, messageFiles, mediaToSend){
     //if number is not on Whatsapp
     if(! (await WWebClient.isRegisteredUser(chatId))){
         console.log(chatId+': NOT ON WHATSAPP');
     }
     else{
         //if message exists
-        if(messageToSend!='')
+        for(let messageFile of messageFiles) {
+          let messageToSend = fs.readFileSync(messageFile).toString();
+          if(messageToSend!='')
             await WWebClient.sendMessage(chatId, messageToSend);
+        }   
         //if media exists
         for(let mediaPath of mediaToSend)
             await WWebClient.sendMessage(chatId, MessageMedia.fromFilePath(mediaPath));

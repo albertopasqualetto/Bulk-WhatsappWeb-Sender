@@ -14,17 +14,10 @@ function askInput(callback){
                 message: "Select the file with telephone numbers (They must be written with country code as a prefix and comma(,) separated) (Confirm with \'Enter\'):",
             },
             {
-                type: 'input',
+                type: 'file-tree-selection',
                 name: 'message',
-                message: "Insert the text you want to send (Formatting: *bold*, _italic_, ~strikethrough~, ```monospace```; you can also add emojis)\n(Then press \'Enter\'):",
-                validate(input) {
-                    if (/\S/g.test(input))
-                        return true;
-                    else{
-                        flagMessage=false;
-                        return true;
-                    }
-                },
+                message: "Select the file containing text you want to send (Do not select entire folders) (Select with \'Space\' and confirm with \'Enter\'):",
+                multiple: true,
             },
             {
                 type: 'file-tree-selection',
