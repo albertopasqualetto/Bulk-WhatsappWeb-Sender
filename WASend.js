@@ -6,6 +6,8 @@ const qrcode = require('qrcode-terminal');
 const path = require('path');
 const fs = require('fs');
 
+var log_file = fs.createWriteStream(__dirname + '/log.txt', {flags : 'w'});
+
 //Whatsapp magic
 function SendMessages(numbersFile, messageToSend, mediaToSend){
     const client = new Client({
@@ -18,7 +20,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
             //executablePath: '/usr/bin/google-chrome',                                 //for sending videos from chrome caveat //TODO can I use Edge?
         }
     });
-
+    
     client.initialize();
 
     client.on('qr', (qr) => {
@@ -28,12 +30,12 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
 
     client.on('auth_failure', msg => {
         // Fired if session restore was unsuccessful
-        console.error('WWEB AUTHENTICATION FAILURE', msg);
+        log('WWEB AUTHENTICATION FAILURE'+msg, true);
     });
 
 
     client.on('ready', async () => {
-        console.log('WWEB READY');
+        log('WWEB READY');
         await client.sendPresenceAvailable();
 
         let numbersArr;
@@ -42,7 +44,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
             const numbers = fs.readFileSync(numbersFile);
             numbersArr = numbers.toString().split(",");
         } catch(err){
-            console.error(err);
+            log(err,true);
         }
 
         for(let number of numbersArr) {
@@ -61,7 +63,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
         }
         await client.sendPresenceUnavailable();
         await client.destroy(); //TODO why do I need this?
-        console.log('ALL DONE!');
+        log('ALL DONE!');
     });
 }
 
@@ -69,7 +71,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
 async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
     //if number is not on Whatsapp
     if(! (await WWebClient.isRegisteredUser(chatId))){
-        console.log(chatId+': NOT ON WHATSAPP');
+        log(chatId+': NOT ON WHATSAPP');
     }
     else{
         //if message exists
@@ -79,7 +81,21 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
         for(let mediaPath of mediaToSend)
             await WWebClient.sendMessage(chatId, MessageMedia.fromFilePath(mediaPath));
 
-        console.log(chatId+': SENT');
+        log(chatId+': SENT');
+    }
+}
+
+function log(msg, error=false) {
+    let today=new Date();
+    let formattedDateTime='['+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+'] ';
+
+    if(!error){
+        console.log(msg);
+        log_file.write(formattedDateTime+'INFO: '+msg+'\n');
+    }
+    else{
+        console.error(msg);
+        log_file.write(formattedDateTime+'ERROR: '+msg+'\n');
     }
 }
 
