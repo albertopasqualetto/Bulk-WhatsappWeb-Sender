@@ -1,10 +1,12 @@
+# Bulk-WhatsappWeb-Sender
+
 This tool permits people to send WhatsApp messages in bulk through WhatsApp Web with a nice CLI interface.
 
 **This software is not completely reliable and tested!**
 
 ## How to
 
-Open a terminal in the folder and start the program (`index-win.exe` in Windows and `./index-linux` in Linux; in Linux you may have to give execute permissions).
+Download your relative OS .zip, decompress it, open a terminal in the folder and start the program (`index.exe` in Windows and `./index` in Linux; in Linux you may have to give execute permissions).
 
 :x: It is not able to send gifs and to send all the content of a folder.
 
