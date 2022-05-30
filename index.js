@@ -8,10 +8,11 @@ const { program } = require('commander');
 //process.pkg is true if compiled, false if not 
 global.pupPath='';
 
+
 program
 	.name('Bulk-WhatsappWeb-Sender')
 	.description('Send bulk messages to a telephone number list')
-	.version('1.2.0');
+	.version(require('./package.json').version);
 
 program
 	.option('-n, --numbers <numbersFile>', 'pass numbers file as a parameter')
