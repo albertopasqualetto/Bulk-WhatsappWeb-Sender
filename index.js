@@ -14,10 +14,12 @@ program
 	.version('1.2.0');
 
 program
-	/* .option('-n, --numbers')		//TODO use args options to bypass interaction
-	.option('-w, --write-message')
-	.option('-r, --read-message')
-	.option('-f, --files') */
+	.option('-n, --numbers <numbersFile>', 'pass numbers file as a parameter')
+	.option('-m, --message [msg]', 'write message directly as a parameter, overwrites \'--text-file\'')
+	.option('-M, --no-message', 'do not send text, overwrites \'--message\' and \'--text-file\'')
+	.option('-t, --text-file [textFile]', 'pass message to send as a file')
+	.option('-f, --files [mediaFiles...]', 'pass media to send with ther path')
+	.option('-F, --no-files', 'do not send files, overwrites \'--files\'')
 	.option('-la, --local-auth', 'use LocalAuth authentication mode instead of NoAuth (keep your account logged in)', false)
 	.option('-lc, --local-chromium', 'use local Chromium executable instead of installed Chrome', false);
 
@@ -38,7 +40,7 @@ if(!options.localChromium){
 
 /* var numbersFile;
 var messageToSend;
-var mediaToSend; */
+var filesToSend; */
 
 questions.ask(WASend.send);		//Bootstrap
 
