@@ -2,9 +2,10 @@ const questions=require('./questions');
 const WASend=require('./WASend');
 const fs=require('fs');
 const path=require('path');
+const { platform } = require('os');
 const { program } = require('commander');
 
-process.env.NODE_LAUNCH_MODE = 'native';	//'native'= "node index.js"; 'compiled'=index.exe
+//process.pkg is true if compiled, false if not 
 global.pupPath='';
 
 program
@@ -24,22 +25,15 @@ program.parse();
 global.options= program.opts();
 
 
-// TODO download chromium only if needed
+// TODO download chromium only if needed https://github.com/vercel/pkg/issues/204#issuecomment-333288567
+if(process.pkg){
+	pupPath=getInternalChromiumPath();
+}
+
 if(!options.localChromium){
-	//Check if chrome is installed
-	fs.access(require('get-google-chrome-path').getGoogleChromePath(), fs.constants.F_OK, (err) => {
-		if(err){
-			if(process.env.NODE_LAUNCH_MODE === 'compiled'){
-				let dirPlatVer=fs.readdirSync(path.join(__dirname,'.local-chromium'));		//e.g.: ./.local-chromium
-				let dirPlat=fs.readdirSync(path.join(__dirname,'.local-chromium',dirPlatVer));	//e.g.: ./.local-chromium/linux-*
-				pupPath=path.join(__dirname,'.local-chromium',dirPlatVer,dirPlat,'chrome')	//e.g.: ./.local-chromium/linux-*/chrome-linux/chrome
-			}
-			//else pupPath=''
-		}
-		else{
-			pupPath=require('get-google-chrome-path').getGoogleChromePath();
-		}
-	});
+	//Check if Chrome is installed		//TODO also check Chromium (and Edge?)
+	if(fs.existsSync(require('get-google-chrome-path').getGoogleChromePath()))
+		pupPath=require('get-google-chrome-path').getGoogleChromePath();
 }
 
 /* var numbersFile;
@@ -50,3 +44,13 @@ questions.ask(WASend.send);		//Bootstrap
 
 /* await questions.ask();
 WASend.send(numbersFile, messageToSend, mediaToSend); */
+function getInternalChromiumPath(){
+	// return 'C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender\build\.local-chromium\win64-982053\chrome-win\chrome.exe';
+	let execDir=path.join(process.execPath, '..');
+	let dirPlatVer=fs.readdirSync(path.join(execDir,'.local-chromium'))[0];		//e.g.: ./.local-chromium
+	let dirPlat=fs.readdirSync(path.join(execDir,'.local-chromium',dirPlatVer))[0];	//e.g.: ./.local-chromium/linux-*
+	if(process.platform === 'win32')
+		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome.exe');	//e.g.: ./.local-chromium/linux-*/chrome-win/chrome.exe
+	else if(process.platform === 'linux')
+		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome');	//e.g.: ./.local-chromium/linux-*/chrome-linux/chrome
+}

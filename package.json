@@ -19,6 +19,7 @@
   "main": "./index.js",
   "scripts": {
     "build": "cross-env NODE_LAUNCH_MODE=compiled pkg index.js -t latest"
+    "build": "pkg index.js -t latest"
   },
   "dependencies": {
     "commander": "^9.2.0",
@@ -29,7 +30,7 @@
     "whatsapp-web.js": "^1.16.6"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
+    "pkg": "^5.7.0"
     "pkg": "^5.6.0"
   }
 }
