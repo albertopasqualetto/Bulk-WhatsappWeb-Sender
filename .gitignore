@@ -107,8 +107,12 @@ dist
 .wwebjs_auth/
 
 # Project files
-build/
 numbers.txt
 
+# Executable exports
+build/
+*index.exe
+*index
+
+*log.txt
 package-lock.json
-*.exe
