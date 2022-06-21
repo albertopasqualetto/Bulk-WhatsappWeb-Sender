@@ -1,5 +1,7 @@
 # Bulk-WhatsappWeb-Sender
 
+![](https://img.shields.io/github/downloads/albertopasqualetto/Bulk-WhatsappWeb-Sender/total?color=blue&label=Downloads)
+
 This tool permits people to send WhatsApp messages in bulk through WhatsApp Web with a nice CLI interface.
 
 **This software is not completely reliable and tested!**
