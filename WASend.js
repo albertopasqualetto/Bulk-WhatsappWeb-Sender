@@ -74,6 +74,9 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
         log(chatId+': NOT ON WHATSAPP');
     }
     else{
+        //send seen
+        await WWebClient.sendSeen(chatId);
+
         //if message exists
         if(messageToSend!='')
             await WWebClient.sendMessage(chatId, messageToSend);
