@@ -56,7 +56,7 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
                 await sendEverything(client, sanitized_number+'@c.us', messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
 
                 //delay to try avoiding ban
-                //TODO how much delay?
+                await new Promise((resolve, reject) => setTimeout(resolve, randBetween(delay[0], delay[1])));	//in ms
                 await new Promise((resolve, reject) => setTimeout(resolve, randBetween(500, 9000)));	//in ms
                 //await new Promise((resolve, reject) => setTimeout(resolve, 5000));	//in ms
             }

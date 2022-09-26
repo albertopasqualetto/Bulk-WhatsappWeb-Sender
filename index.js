@@ -7,6 +7,7 @@ const { program } = require('commander');
 
 //process.pkg is true if compiled, false if not 
 global.pupPath='';
+global.delay = [30000, 50000];
 
 
 program
@@ -19,14 +20,22 @@ program
 	.option('-m, --message [msg]', 'write message directly as a parameter, overwrites \'--text-file\'')
 	.option('-M, --no-message', 'do not send text, overwrites \'--message\' and \'--text-file\'')
 	.option('-t, --text-file [textFile]', 'pass message to send as a file')
-	.option('-f, --files [mediaFiles...]', 'pass media to send with ther path')
+	.option('-f, --files [mediaFiles...]', 'pass media to send with their path')
 	.option('-F, --no-files', 'do not send files, overwrites \'--files\'')
+	.option('-d, --low-delay', 'send messages with a low delay')
+	.option('-D, --high-delay', 'send messages with a high delay')
 	.option('-la, --local-auth', 'use LocalAuth authentication mode instead of NoAuth (keep your account logged in)', false)
 	.option('-lc, --local-chromium', 'use local Chromium executable instead of installed Chrome', false);
 
 program.parse();
 global.options= program.opts();
 
+if(options.lowDelay){
+	DELAY = [500, 9000];
+}
+else if(options.highDelay){
+	DELAY = [60000, 600000];
+}
 
 // TODO download chromium only if needed https://github.com/vercel/pkg/issues/204#issuecomment-333288567
 if(process.pkg){
