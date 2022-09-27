@@ -1,15 +1,16 @@
-module.exports.send = SendMessages
+import wwebpkg from 'whatsapp-web.js';
+const { Client, LocalAuth, NoAuth, MessageMedia } = wwebpkg;
 
-const { Client, LocalAuth, NoAuth, MessageMedia } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+import qrcode from 'qrcode-terminal';
+import fs from 'fs';
 
-const path = require('path');
-const fs = require('fs');
+import * as url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 var log_file = fs.createWriteStream(__dirname + '/log.txt', {flags : 'w'});
 
 //Whatsapp magic
-function SendMessages(numbersFile, messageToSend, mediaToSend){
+export default function sendMessages(numbersFile, messageToSend, mediaToSend){
     const client = new Client({
         authStrategy: options.localAuth ? new LocalAuth() : new NoAuth(),
         puppeteer: {

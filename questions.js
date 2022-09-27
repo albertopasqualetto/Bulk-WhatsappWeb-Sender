@@ -1,13 +1,12 @@
-module.exports.ask = askInput;
+import inquirer from 'inquirer';
+import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 
-const inquirer = require('inquirer');
-const inquirerFileTreeSelection = require('inquirer-file-tree-selection-prompt');
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
-const fs = require('fs');
+import fs from 'fs';
 
 //Ask message and media
-function askInput(callback){
+export default function askInput(callback){
     inquirer
         .prompt([
             {

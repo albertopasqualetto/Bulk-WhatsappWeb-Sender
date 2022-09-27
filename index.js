@@ -1,11 +1,15 @@
-const questions=require('./questions');
-const WASend=require('./WASend');
-const fs=require('fs');
-const path=require('path');
-const { platform } = require('os');
-const { program } = require('commander');
+//TODO use baileys?
+import askInput from "./questions.js";
+import sendMessages from "./WASend.js";
 
-//process.pkg is true if compiled, false if not 
+import fs from 'fs';
+import path from 'path';
+import { program } from 'commander';
+import packageJSON from './package.json' assert  { type: 'json' };
+import {getGoogleChromePath} from "get-google-chrome-path";
+import pressAnyKey from 'press-any-key';
+
+//process.pkg is true if compiled, false if not
 global.pupPath='';
 global.delay = [30000, 50000];
 
@@ -13,7 +17,7 @@ global.delay = [30000, 50000];
 program
 	.name('Bulk-WhatsappWeb-Sender')
 	.description('Send bulk messages to a telephone number list')
-	.version(require('./package.json').version);
+	.version(packageJSON.version);
 
 program
 	.option('-n, --numbers <numbersFile>', 'pass numbers file as a parameter')
@@ -44,18 +48,26 @@ if(process.pkg){
 
 if(!options.localChromium){
 	//Check if Chrome is installed		//TODO also check Chromium (and Edge?)
-	if(fs.existsSync(require('get-google-chrome-path').getGoogleChromePath()))
-		pupPath=require('get-google-chrome-path').getGoogleChromePath();
+	/*if(fs.existsSync(require('get-google-chrome-path').getGoogleChromePath()))
+		pupPath=require('get-google-chrome-path').getGoogleChromePath();*/
+	if(fs.existsSync(getGoogleChromePath()))
+		pupPath=getGoogleChromePath();
 }
 
 /* var numbersFile;
 var messageToSend;
 var filesToSend; */
 
-questions.ask(WASend.send);		//Bootstrap
+// questions.ask(WASend.send);		//Bootstrap	//TODO DOES NOT START
+askInput(sendMessages);
 
 /* await questions.ask();
 WASend.send(numbersFile, messageToSend, mediaToSend); */
+
+if(process.pkg)
+	//require('press-any-key')("Press any key to exit...");	//TODO DOES NOT WAIT!
+	pressAnyKey("Press any key to exit...");
+
 function getInternalChromiumPath(){
 	// return 'C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender\build\.local-chromium\win64-982053\chrome-win\chrome.exe';
 	let execDir=path.join(process.execPath, '..');
