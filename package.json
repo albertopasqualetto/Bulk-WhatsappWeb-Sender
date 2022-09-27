@@ -24,7 +24,7 @@
     "commander": "^9.2.0",
     "get-google-chrome-path": "github:albertopasqualetto/get-google-chrome-path",
     "inquirer": "^9.1.2",
-    "inquirer-file-tree-selection-prompt": "^1.0.19",
+    "inquirer-file-tree-selection-prompt": "^2.0.4",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.17.1"
   },
