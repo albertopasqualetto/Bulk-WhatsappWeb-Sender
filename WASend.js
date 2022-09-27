@@ -57,7 +57,6 @@ function SendMessages(numbersFile, messageToSend, mediaToSend){
 
                 //delay to try avoiding ban
                 await new Promise((resolve, reject) => setTimeout(resolve, randBetween(delay[0], delay[1])));	//in ms
-                await new Promise((resolve, reject) => setTimeout(resolve, randBetween(500, 9000)));	//in ms
                 //await new Promise((resolve, reject) => setTimeout(resolve, 5000));	//in ms
             }
         }
@@ -74,15 +73,20 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
         log(chatId+': NOT ON WHATSAPP');
     }
     else{
+        let thisChat = await WWebClient.getChatById(chatId);
+
         //send seen
-        await WWebClient.sendSeen(chatId);
+        await thisChat.sendSeen();
+
+        //send "typing..."
+        await thisChat.sendStateTyping();
 
         //if message exists
         if(messageToSend!='')
-            await WWebClient.sendMessage(chatId, messageToSend);
+            await thisChat.sendMessage(messageToSend);
         //if media exists
         for(let mediaPath of mediaToSend)
-            await WWebClient.sendMessage(chatId, MessageMedia.fromFilePath(mediaPath));
+            await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath));
 
         log(chatId+': SENT');
     }
