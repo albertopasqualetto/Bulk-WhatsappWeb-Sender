@@ -1,6 +1,6 @@
 {
   "name": "bulk-whatsappweb-sender",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": {
     "name": "Alberto Pasqualetto",
     "email": "39854348+albertopasqualetto@users.noreply.github.com"
@@ -20,9 +20,10 @@
   "type": "module",
   "scripts": {
     "build": " caxa --input . --output \"bwweb.exe\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/index.js\" ",
+    "start": "node index.js"
   },
   "dependencies": {
-    "commander": "^9.2.0",
+    "commander": "^9.4.1",
     "get-google-chrome-path": "github:albertopasqualetto/get-google-chrome-path",
     "inquirer": "^9.1.2",
     "inquirer-file-tree-selection-prompt": "^2.0.4",
