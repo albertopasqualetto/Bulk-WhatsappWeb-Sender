@@ -9,7 +9,7 @@ import parsePhoneNumber from 'libphonenumber-js';
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-var log_file = fs.createWriteStream(__dirname + '/log.txt', {flags : 'w'});
+const log_file = fs.createWriteStream(__dirname + '/log.txt', {flags: 'w'});
 
 //Whatsapp magic
 export default function sendMessages(numbersFile, messageToSend, mediaToSend){
@@ -41,7 +41,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
         log('WWEB READY');
         await client.sendPresenceAvailable();
 
-        let my_number_country = parsePhoneNumber("+" + (await client.info.wid.user)).country;
+        let my_number_country = parsePhoneNumber("+" + (client.info.wid.user)).country;
 
         let numbersArr;
         try{
@@ -63,7 +63,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
                 await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
 
                 //delay to try avoiding ban
-                await new Promise((resolve, reject) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));	//in ms
+                await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));	//in ms
                 //await new Promise((resolve, reject) => setTimeout(resolve, 5000));	//in ms
             } //else nothing
         }
@@ -89,7 +89,7 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
         await thisChat.sendStateTyping();
 
         //if message exists
-        if(messageToSend!='')
+        if(messageToSend !== '')
             await thisChat.sendMessage(messageToSend);
         //if media exists
         for(let mediaPath of mediaToSend)

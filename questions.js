@@ -35,34 +35,34 @@ export default function askInput(callback){
             let messageToSend;
             let filesToSend;
 
-            if(typeof options.numbers === 'undefined')          //not specified as a parameter -> using inquirer's answer
-                numbersFile=answers.numbers;
+            if (typeof options.numbers !== 'undefined')          //not specified as a parameter -> using inquirer's answer
+                numbersFile = options.numbers;
             else                                                //specified as a parameter
-                numbersFile=options.numbers;
+                numbersFile = answers.numbers;
 
             if(options.message === false)                               //flag --no-message
-                messageToSend='';
+                messageToSend = '';
             else if(typeof options.message === 'undefined' && typeof options.textFile === 'undefined')   //not specified as a parameter -> using inquirer's answer
-                messageToSend=answers.message;
+                messageToSend = answers.message;
             else if(typeof options.message !== 'undefined'){    //flag --message
                 if(options.message !== true)                    //message not empty
-                    messageToSend=options.message.trim();
+                    messageToSend = options.message.trim();
                 else                                            //message empty
-                    messageToSend='';
+                    messageToSend = '';
             }
             else if(options.textFile === true)                  //using --text-file flag, but no file specified -> no text to send
-                messageToSend='';
+                messageToSend = '';
             else                                                //using --text-file flag and file specified -> read it to string
                 messageToSend = fs.readFileSync(options.text).toString();
 
             if(options.files === false)                                 //flag --no-files
-                filesToSend=[];
+                filesToSend = [];
             else if(typeof options.files === 'undefined')       //not specified as a parameter -> using inquirer's answer
-                filesToSend=answers.files;
+                filesToSend = answers.files;
             else if(options.files === true)                     //using --files flag, but no file specified -> no files to send
-                filesToSend=[];
+                filesToSend = [];
             else                                                //using --files flag and 1+ files specified -> pass their path to WASend
-                filesToSend=options.files;
+                filesToSend = options.files;
 
 
             callback(numbersFile, messageToSend, filesToSend);
