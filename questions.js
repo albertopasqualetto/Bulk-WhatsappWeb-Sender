@@ -16,17 +16,9 @@ export default function askInput(callback){
                 when: (typeof options.numbers === 'undefined')
             },
             {
-                type: 'input',    //TODO substitute with type editor?
+                type: 'input',    //maybe substitute with type editor
                 name: 'message',
                 message: "Insert the text you want to send (Formatting: *bold*, _italic_, ~strikethrough~, ```monospace```; no new line admitted; you can also add emojis)\n(Then press \'Enter\'):",
-                /* validate(input) {            //TODO to remove?
-                    if (/\S/g.test(input))
-                        return true;
-                    else{
-                        flagMessage=false;
-                        return true;
-                    }
-                }, */
                 when: (options.message !== false && typeof options.message === 'undefined' && typeof options.textFile === 'undefined')
             },
             {
