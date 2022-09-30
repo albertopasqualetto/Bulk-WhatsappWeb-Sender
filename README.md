@@ -15,6 +15,16 @@ Download your relative OS .zip, decompress it, open a terminal in the folder and
 
 This is based on the beautiful [whatsapp-web.js node package](https://github.com/pedroslopez/whatsapp-web.js).
 
+## Build
+
+To create an executable in order to use it on a computer without Node.js installed.
+
+You need to have [Node.js](https://nodejs.org/) installed.
+
+Then, open a terminal in the project folder and run `npm install` and `npm run build`.
+
+It will be slow.
+
 ## Disclaimer
 This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates. The official WhatsApp website can be found at https://whatsapp.com. "WhatsApp" as well as related names, marks, emblems and images are registered trademarks of their respective owners.
 

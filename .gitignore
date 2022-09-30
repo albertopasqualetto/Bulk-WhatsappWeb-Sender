@@ -113,6 +113,7 @@ numbers.txt
 build/
 *index.exe
 *index
+*.exe
 
 *log.txt
 package-lock.json

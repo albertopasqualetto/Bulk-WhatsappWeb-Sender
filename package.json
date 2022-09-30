@@ -19,17 +19,18 @@
   "main": "./index.js",
   "type": "module",
   "scripts": {
-    "build": "pkg index.js -t latest"
+    "build": " caxa --input . --output \"bwweb.exe\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/index.js\" ",
   },
   "dependencies": {
     "commander": "^9.2.0",
     "get-google-chrome-path": "github:albertopasqualetto/get-google-chrome-path",
     "inquirer": "^9.1.2",
     "inquirer-file-tree-selection-prompt": "^2.0.4",
+    "press-any-key": "^0.1.1",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.17.1"
   },
   "devDependencies": {
-    "pkg": "^5.7.0"
+    "caxa": "^2.1.0"
   }
 }

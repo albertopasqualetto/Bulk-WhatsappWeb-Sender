@@ -2,6 +2,7 @@
 import askInput from "./questions.js";
 import sendMessages from "./WASend.js";
 
+import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import { program } from 'commander';
@@ -9,9 +10,14 @@ import packageJSON from './package.json' assert  { type: 'json' };
 import {getGoogleChromePath} from "get-google-chrome-path";
 import pressAnyKey from 'press-any-key';
 
-//process.pkg is true if compiled, false if not
-global.pupPath='';
-global.delay = [30000, 50000];
+//process.env.CAXA is true if compiled, undefined if no NO
+global.pupPath = '';
+global.delayms = [30000, 50000];
+
+global.compiled = false;
+import * as url from 'url';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+__dirname.startsWith(path.join(os.tmpdir(), "caxa")) ? global.compiled=true : global.compiled=false;
 
 
 program
@@ -35,16 +41,16 @@ program.parse();
 global.options= program.opts();
 
 if(options.lowDelay){
-	DELAY = [500, 9000];
+	global.delayms = [500, 9000];
 }
 else if(options.highDelay){
-	DELAY = [60000, 600000];
+	global.delayms = [60000, 600000];
 }
 
 // TODO download chromium only if needed https://github.com/vercel/pkg/issues/204#issuecomment-333288567
-if(process.pkg){
+/*if(compiled){
 	pupPath=getInternalChromiumPath();
-}
+}*/
 
 if(!options.localChromium){
 	//Check if Chrome is installed		//TODO also check Chromium (and Edge?)
@@ -58,15 +64,13 @@ if(!options.localChromium){
 var messageToSend;
 var filesToSend; */
 
-// questions.ask(WASend.send);		//Bootstrap	//TODO DOES NOT START
-askInput(sendMessages);
+askInput(sendMessages);		//Bootstrap
 
 /* await questions.ask();
 WASend.send(numbersFile, messageToSend, mediaToSend); */
 
-if(process.pkg)
-	//require('press-any-key')("Press any key to exit...");	//TODO DOES NOT WAIT!
-	pressAnyKey("Press any key to exit...");
+if(compiled)
+	pressAnyKey("Press any key to exit...");	//TODO DOES NOT WAIT!
 
 function getInternalChromiumPath(){
 	// return 'C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender\build\.local-chromium\win64-982053\chrome-win\chrome.exe';
