@@ -10,6 +10,8 @@ This tool permits people to send WhatsApp messages in bulk through WhatsApp Web 
 
 Download your relative OS .zip, decompress it, open a terminal in the folder and start the program (`index.exe` in Windows and `./index` in Linux; in Linux you may have to give execute permissions).
 
+Numbers without country prefix fallback on the same country prefix of the sender number.
+
 :x: It is not able to send gifs and to send all the content of a folder.
 
 
