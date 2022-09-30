@@ -4,6 +4,8 @@ const { Client, LocalAuth, NoAuth, MessageMedia } = wwebpkg;
 import qrcode from 'qrcode-terminal';
 import fs from 'fs';
 
+import parsePhoneNumber from 'libphonenumber-js';
+
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -39,6 +41,8 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
         log('WWEB READY');
         await client.sendPresenceAvailable();
 
+        let my_number_country = parsePhoneNumber("+" + (await client.info.wid.user)).country;
+
         let numbersArr;
         try{
             //const numbers = fs.readFileSync(path.resolve('numbers.txt'));
@@ -49,17 +53,19 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
         }
 
         for(let number of numbersArr) {
-            if(number=='')
-                continue;
-            else{
-                let sanitized_number = number.toString().replace(/[- )(+]/g, "");	//numbers already with a prefix	//TODO add numbers without a prefix
+            if(number !== '') {
+                let parsed_number = parseNumber(number, my_number_country);
+                if(parsed_number === null) {    //if number is not valid skip it
+                    log(number + ": INVALID NUMBER", true);
+                    continue;
+                }
 
-                await sendEverything(client, sanitized_number+'@c.us', messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
+                await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
 
                 //delay to try avoiding ban
-                await new Promise((resolve, reject) => setTimeout(resolve, randBetween(delay[0], delay[1])));	//in ms
+                await new Promise((resolve, reject) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));	//in ms
                 //await new Promise((resolve, reject) => setTimeout(resolve, 5000));	//in ms
-            }
+            } //else nothing
         }
         await client.sendPresenceUnavailable();
         await client.destroy(); //TODO why do I need this?
@@ -71,7 +77,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
 async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
     //if number is not on Whatsapp
     if(! (await WWebClient.isRegisteredUser(chatId))){
-        log(chatId+': NOT ON WHATSAPP');
+        log(chatId + ": NOT ON WHATSAPP");
     }
     else{
         let thisChat = await WWebClient.getChatById(chatId);
@@ -89,21 +95,32 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
         for(let mediaPath of mediaToSend)
             await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath));
 
-        log(chatId+': SENT');
+        log(chatId + ": SENT");
     }
 }
 
+function parseNumber(number, country){
+    try{
+        let parsed = parsePhoneNumber(number, country);
+        return parsed.number.toString().replace(/[- )(+]/g, '');    //clean number
+    } catch(err){
+        log(err,true);
+        return null;
+    }
+}
+
+
 function log(msg, error=false) {
     let today=new Date();
-    let formattedDateTime='['+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+'] ';
+    let formattedDateTime='['+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()+'] ';
 
     if(!error){
         console.log(msg);
-        log_file.write(formattedDateTime+'INFO: '+msg+'\n');
+        log_file.write(formattedDateTime + "INFO: " + msg + '\n');
     }
     else{
         console.error(msg);
-        log_file.write(formattedDateTime+'ERROR: '+msg+'\n');
+        log_file.write(formattedDateTime + "ERROR: " + msg + '\n');
     }
 }
 
