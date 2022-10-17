@@ -33,6 +33,6 @@
     "whatsapp-web.js": "^1.17.1"
   },
   "devDependencies": {
-    "caxa": "^2.1.0"
+    "caxa": "^3.0.1"
   }
 }
