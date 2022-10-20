@@ -53,7 +53,7 @@ export default function askInput(callback){
             else if(options.textFile === true)                  //using --text-file flag, but no file specified -> no text to send
                 messageToSend = '';
             else                                                //using --text-file flag and file specified -> read it to string
-                messageToSend = fs.readFileSync(options.text).toString();
+                messageToSend = fs.readFileSync(options.textFile).toString();
 
             if(options.files === false)                                 //flag --no-files
                 filesToSend = [];
