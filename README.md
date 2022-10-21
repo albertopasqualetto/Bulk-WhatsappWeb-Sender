@@ -14,6 +14,8 @@ Numbers without country prefix fallback on the same country prefix of the sender
 
 :x: It is not able to send gifs and to send all the content of a folder.
 
+Ignore the warning on startup, it is not a problem.
+
 
 This is based on the beautiful [whatsapp-web.js node package](https://github.com/pedroslopez/whatsapp-web.js).
 

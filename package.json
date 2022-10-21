@@ -1,6 +1,6 @@
 {
   "name": "bulk-whatsappweb-sender",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "author": {
     "name": "Alberto Pasqualetto",
     "email": "39854348+albertopasqualetto@users.noreply.github.com"
@@ -30,7 +30,7 @@
     "libphonenumber-js": "^1.10.13",
     "press-any-key": "^0.1.1",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.17.1"
+    "whatsapp-web.js": "^1.18.0"
   },
   "devDependencies": {
     "caxa": "^3.0.1"

@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { program } from 'commander';
 import packageJSON from './package.json' assert  { type: 'json' };
-import {getGoogleChromePath} from "get-google-chrome-path";
+import { getGoogleChromePath } from "get-google-chrome-path";
 import pressAnyKey from 'press-any-key';
 
 //process.env.CAXA is true if compiled, undefined if no NO
@@ -72,13 +72,14 @@ WASend.send(numbersFile, messageToSend, mediaToSend); */
 if(compiled)
 	pressAnyKey("Press any key to exit...");	//TODO DOES NOT WAIT!
 
+/* this was used by pkg
 function getInternalChromiumPath(){
 	// return 'C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender\build\.local-chromium\win64-982053\chrome-win\chrome.exe';
 	let execDir=path.join(process.execPath, '..');
 	let dirPlatVer=fs.readdirSync(path.join(execDir,'.local-chromium'))[0];		//e.g.: ./.local-chromium
 	let dirPlat=fs.readdirSync(path.join(execDir,'.local-chromium',dirPlatVer))[0];	//e.g.: ./.local-chromium/linux-*
 	if(process.platform === 'win32')
-		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome.exe');	//e.g.: ./.local-chromium/linux-*/chrome-win/chrome.exe
+		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome.exe');	//e.g.: ./.local-chromium/linux-*!/chrome-win/chrome.exe
 	else if(process.platform === 'linux')
-		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome');	//e.g.: ./.local-chromium/linux-*/chrome-linux/chrome
-}
+		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome');	//e.g.: ./.local-chromium/linux-*!/chrome-linux/chrome
+}*/
