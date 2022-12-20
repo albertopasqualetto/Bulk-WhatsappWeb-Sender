@@ -6,20 +6,23 @@ This tool permits people to send WhatsApp messages in bulk through WhatsApp Web 
 
 **This software is not completely reliable and tested!**
 
+Actually there are [some bans reported by users](https://github.com/pedroslopez/whatsapp-web.js/issues/1872), so use it at your own risk!!
+
 ## How to
 
-Download your relative OS .zip, decompress it, open a terminal in the folder and start the program (`index.exe` in Windows and `./index` in Linux; in Linux you may have to give execute permissions).
+Download your relative OS .zip, decompress it, open a terminal in the folder and start the program with `npm run start`, then follow the instructions.
 
 Numbers without country prefix fallback on the same country prefix of the sender number.
 
 :x: It is not able to send gifs and to send all the content of a folder.
 
-Ignore the warning on startup, it is not a problem.
+:x: It can only send videos with a maximum size of 16MB and documents with a maximum size of 100MB.
 
+:x: Temporarily videos are sent as documents (with 100MB limit).
 
 This is based on the beautiful [whatsapp-web.js node package](https://github.com/pedroslopez/whatsapp-web.js).
 
-## Build
+## Build (with CAXA)
 
 To create an executable in order to use it on a computer without Node.js installed.
 
