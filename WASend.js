@@ -16,11 +16,8 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
     const client = new Client({
         authStrategy: options.localAuth ? new LocalAuth() : new NoAuth(),
         puppeteer: {
-            headless: true,
-            executablePath: pupPath,
-            //executablePath: './.local-chromium/win64-982053/chrome-win/chrome.exe',   //for pkg output win
-            //executablePath: './.local-chromium/linux-982053/chrome-linux/chrome',     //for pkg output linux
-            //executablePath: '/usr/bin/google-chrome',                                 //for sending videos from chrome caveat //TODO can I use Edge?
+            headless: false,
+            executablePath: pupPath
         }
     });
     

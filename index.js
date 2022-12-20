@@ -3,17 +3,19 @@ import askInput from "./questions.js";
 import sendMessages from "./WASend.js";
 
 import os from 'os';
-import fs from 'fs';
+// import fs from 'fs';     // was used in pkg compilation
 import path from 'path';
 import { program } from 'commander';
 import packageJSON from './package.json' assert  { type: 'json' };
-import { getGoogleChromePath } from "get-google-chrome-path";
+import { getChromiumPath } from "locate-browsers";
+import acceptedRevs from './node_modules/puppeteer-core/lib/cjs/puppeteer/revisions.js';
 import pressAnyKey from 'press-any-key';
 
-//process.env.CAXA is true if compiled, undefined if no NO
+// process.env.CAXA is true if compiled, undefined if no NO
 global.pupPath = '';
 global.delayms = [30000, 50000];
 
+// used in compilation
 global.compiled = false;
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -47,17 +49,15 @@ else if(options.highDelay){
 	global.delayms = [60000, 600000];
 }
 
-// TODO download chromium only if needed https://github.com/vercel/pkg/issues/204#issuecomment-333288567
 /*if(compiled){
 	pupPath=getInternalChromiumPath();
 }*/
 
-if(!options.localChromium){
-	//Check if Chrome is installed		//TODO also check Chromium (and Edge?)
-	/*if(fs.existsSync(require('get-google-chrome-path').getGoogleChromePath()))
-		pupPath=require('get-google-chrome-path').getGoogleChromePath();*/
-	if(fs.existsSync(getGoogleChromePath()))
-		pupPath=getGoogleChromePath();
+if (options.localChromium) {
+	pupPath = downloadLocalChromium();
+} else {
+	//Check if Chromium is installed, otherwise download
+	pupPath = getChromiumPath() || downloadLocalChromium();
 }
 
 /* var numbersFile;
@@ -72,6 +72,7 @@ WASend.send(numbersFile, messageToSend, mediaToSend); */
 if(compiled)
 	pressAnyKey("Press any key to exit...");	//TODO DOES NOT WAIT!
 
+
 /* this was used by pkg
 function getInternalChromiumPath(){
 	// return 'C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender\build\.local-chromium\win64-982053\chrome-win\chrome.exe';
@@ -83,3 +84,13 @@ function getInternalChromiumPath(){
 	else if(process.platform === 'linux')
 		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome');	//e.g.: ./.local-chromium/linux-*!/chrome-linux/chrome
 }*/
+
+async function downloadLocalChromium(){
+	// TODO Check if already downloaded
+
+	// Download Chromium
+	const browserFetcher = new BrowserFetcher({path: './'});
+	const revisionInfo = await browserFetcher.download(acceptedRevs.PUPPETEER_REVISIONS.chromium);
+
+	return revisionInfo.executablePath;
+}
