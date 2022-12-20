@@ -6,6 +6,8 @@ import fs from 'fs';
 
 import parsePhoneNumber from 'libphonenumber-js';
 
+import mime from 'mime-types';
+
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -74,7 +76,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
 async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
     //if number is not on Whatsapp
     if(! (await WWebClient.isRegisteredUser(chatId))){
-        log(chatId + ": NOT ON WHATSAPP");
+        log(chatId.split('@c.us')[0] + ": NOT ON WHATSAPP");
     }
     else{
         let thisChat = await WWebClient.getChatById(chatId);
@@ -90,9 +92,12 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
             await thisChat.sendMessage(messageToSend);
         //if media exists
         for(let mediaPath of mediaToSend)
-            await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath));
+            if (mime.lookup(mediaPath).startsWith('video'))     // This is necessary due to an issue with the library
+                await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath),{ sendMediaAsDocument: true });
+            else
+                await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath));
 
-        log(chatId + ": SENT");
+        log(chatId.split('@c.us')[0] + ": SENT");
     }
 }
 
