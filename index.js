@@ -9,6 +9,7 @@ import { program } from 'commander';
 import packageJSON from './package.json' assert  { type: 'json' };
 import { getChromiumPath } from "locate-browsers";
 import acceptedRevs from './node_modules/puppeteer-core/lib/cjs/puppeteer/revisions.js';
+import { BrowserFetcher } from "puppeteer-core";
 import pressAnyKey from 'press-any-key';
 
 // process.env.CAXA is true if compiled, undefined if no NO
@@ -49,16 +50,17 @@ else if(options.highDelay){
 	global.delayms = [60000, 600000];
 }
 
-/*if(compiled){
-	pupPath=getInternalChromiumPath();
-}*/
-
-if (options.localChromium) {
+if(compiled){
 	pupPath = downloadLocalChromium();
 } else {
-	//Check if Chromium is installed, otherwise download
-	pupPath = getChromiumPath() || downloadLocalChromium();
+	if(options.localChromium){
+		pupPath = '';
+	} else {
+		//Check if Chromium is installed, otherwise download
+		pupPath = await getChromiumPath() || downloadLocalChromium();
+	}
 }
+
 
 /* var numbersFile;
 var messageToSend;
@@ -73,17 +75,6 @@ if(compiled)
 	pressAnyKey("Press any key to exit...");	//TODO DOES NOT WAIT!
 
 
-/* this was used by pkg
-function getInternalChromiumPath(){
-	// return 'C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender\build\.local-chromium\win64-982053\chrome-win\chrome.exe';
-	let execDir=path.join(process.execPath, '..');
-	let dirPlatVer=fs.readdirSync(path.join(execDir,'.local-chromium'))[0];		//e.g.: ./.local-chromium
-	let dirPlat=fs.readdirSync(path.join(execDir,'.local-chromium',dirPlatVer))[0];	//e.g.: ./.local-chromium/linux-*
-	if(process.platform === 'win32')
-		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome.exe');	//e.g.: ./.local-chromium/linux-*!/chrome-win/chrome.exe
-	else if(process.platform === 'linux')
-		return path.join(execDir,'.local-chromium',dirPlatVer,dirPlat,'chrome');	//e.g.: ./.local-chromium/linux-*!/chrome-linux/chrome
-}*/
 
 async function downloadLocalChromium(){
 	// TODO Check if already downloaded
