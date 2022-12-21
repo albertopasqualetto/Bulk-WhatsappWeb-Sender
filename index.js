@@ -7,7 +7,7 @@ import os from 'os';
 import path from 'path';
 import { program } from 'commander';
 import packageJSON from './package.json' assert  { type: 'json' };
-import { getChromiumPath } from "locate-browsers";
+import { getChromiumPath } from "browser-paths";
 import acceptedRevs from './node_modules/puppeteer-core/lib/cjs/puppeteer/revisions.js';
 import { BrowserFetcher } from "puppeteer-core";
 import pressAnyKey from 'press-any-key';
@@ -80,6 +80,7 @@ async function downloadLocalChromium(){
 	// TODO Check if already downloaded
 
 	// Download Chromium
+	console.log('Downloading Chromium...');
 	const browserFetcher = new BrowserFetcher({path: './'});
 	const revisionInfo = await browserFetcher.download(acceptedRevs.PUPPETEER_REVISIONS.chromium);
 
