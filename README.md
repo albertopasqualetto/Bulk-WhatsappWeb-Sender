@@ -14,6 +14,10 @@ Download your relative OS .zip, decompress it, open a terminal in the folder and
 
 Numbers without country prefix fallback on the same country prefix of the sender number.
 
+Use `--help` flag to see all the command line options.
+
+:x: It is able to send videos only if Google Chrome is installed (not sure if Edge and other browsers are supported).
+
 :x: It is not able to send gifs and to send all the content of a folder.
 
 :x: It can only send videos with a maximum size of 16MB and documents with a maximum size of 100MB.

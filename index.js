@@ -24,8 +24,9 @@ __dirname.startsWith(path.join(os.tmpdir(), "caxa")) ? global.compiled=true : gl
 
 
 program
-	.name('Bulk-WhatsappWeb-Sender')
-	.description('Send bulk messages to a telephone number list')
+	// .name('Bulk-WhatsappWeb-Sender')
+	.name('npm run start')
+	.description('Send bulk messages to a telephone number list. \nStart and then follow the instructions.')
 	.version(packageJSON.version);
 
 program
