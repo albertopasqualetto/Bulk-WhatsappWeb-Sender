@@ -13,7 +13,7 @@ import { BrowserFetcher } from "puppeteer-core";
 import pressAnyKey from 'press-any-key';
 
 // process.env.CAXA is true if compiled, undefined if no NO
-global.pupPath = '';
+global.pupPath = '';        // '' means that the path is the default one
 global.delayms = [30000, 50000];
 
 // used in compilation
