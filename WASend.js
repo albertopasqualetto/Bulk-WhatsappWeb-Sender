@@ -18,7 +18,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
     const client = new Client({
         authStrategy: options.localAuth ? new LocalAuth() : new NoAuth(),
         puppeteer: {
-            headless: true,
+            headless: process.env.NODE_ENV === 'dev' ? false : true,
             executablePath: pupPath
         }
     });
