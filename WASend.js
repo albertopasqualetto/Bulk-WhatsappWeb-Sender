@@ -67,7 +67,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
             } //else nothing
         }
         await client.sendPresenceUnavailable();
-        await client.destroy(); //TODO why do I need this?
+        await client.destroy();
         log('ALL DONE!');
     });
 }
