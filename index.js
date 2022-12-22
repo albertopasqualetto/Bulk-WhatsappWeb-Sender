@@ -37,7 +37,7 @@ program
 	.option('-f, --files [mediaFiles...]', 'pass media to send with their path')
 	.option('-F, --no-files', 'do not send files, overwrites \'--files\'')
 	.option('-d, --low-delay', 'send messages with a low delay, use this if you are confident that you won\'t be banned')
-	.option('-D, --high-delay', 'send messages with a high delay, use this if you are sending to new numbers (high probability of being banned)')
+	.option('-D, --high-delay', 'send messages with a high delay, use this if you are sending from a new/unused number (high probability of being banned)')
 	.option('-la, --local-auth', 'use LocalAuth authentication mode instead of NoAuth (keep your account logged in)', false)
 	.option('-lc, --local-chromium', 'use local Chromium executable instead of installed Chrome', false);
 
