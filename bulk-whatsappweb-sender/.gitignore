@@ -106,13 +106,5 @@ dist
 # whatsapp-web.js files
 .wwebjs_auth/
 
-# Project files
-numbers.txt
-
-# Executable exports
-build/
-*index.exe
-*index
-*.exe
 
 *log.txt
