@@ -1,6 +1,4 @@
-# Bulk-WhatsappWeb-Sender
-
-![](https://img.shields.io/github/downloads/albertopasqualetto/Bulk-WhatsappWeb-Sender/total?color=blue&label=Downloads)
+# bulk-whatsappweb-sender
 
 This tool permits people to send WhatsApp messages in bulk through WhatsApp Web with a nice CLI interface.
 
@@ -10,7 +8,7 @@ Actually there are [some bans reported by users](https://github.com/pedroslopez/
 
 ## How to
 
-Download your relative OS .zip, decompress it, open a terminal in the folder and start the program with `npm run start`, then follow the instructions.
+Clone the repo, decompress it, open a terminal in the folder and start the program with `npm run start`, then follow the instructions.
 
 Numbers without country prefix fallback on the same country prefix of the sender number.
 
