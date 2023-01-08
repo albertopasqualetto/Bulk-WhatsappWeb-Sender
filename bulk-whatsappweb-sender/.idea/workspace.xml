@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bb12605-ee73-4f8e-b4d2-daeacc7ea93f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../BWWBS-GUI-2.0.0.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BWWBS-GUI/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -157,7 +160,7 @@
       <workItem from="1673113633952" duration="1043000" />
       <workItem from="1673135323031" duration="2632000" />
       <workItem from="1673187204412" duration="862000" />
-      <workItem from="1673188085779" duration="991000" />
+      <workItem from="1673188085779" duration="1473000" />
     </task>
     <servers />
   </component>
