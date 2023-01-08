@@ -36,7 +36,6 @@ def find_BBWBS_cli():
         exit()
 
 
-
 def init_BBWBS_cli():
     try:
         if subprocess.run("node -v", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT).returncode < 0:
