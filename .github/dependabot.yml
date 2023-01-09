@@ -4,7 +4,7 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/bulk-whatsappweb-sender" # Location of package manifests
     schedule:
       interval: "weekly"
     versioning-strategy: increase-if-necessary
