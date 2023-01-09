@@ -1,10 +1,13 @@
 # TODO rename?
+# TODO render emoji correctly in labels
+# TODO create a package?
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as tkmessagebox
 from tkinter import scrolledtext as st
 from tkinter import filedialog as fd
 from tktooltip import ToolTip
+from node_js_install import install_node_js
 
 import sys
 import os
@@ -21,15 +24,11 @@ global DELAY_VAR
 # init methods
 def find_BBWBS_cli():
     global BBWWS_NODE_FOLDER
-    bwwbs_node_path_here = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "bulk-whatsappweb-sender"))
-    bwwbs_node_path_brother = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "bulk-whatsappweb-sender"))
+    bwwbs_node_path_not_compiled = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "bulk-whatsappweb-sender"))
     if getattr(sys, 'frozen', False):   # if compiled
         BBWWS_NODE_FOLDER = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "bulk-whatsappweb-sender"))
-    elif os.path.exists(bwwbs_node_path_here):
-        BBWWS_NODE_FOLDER = bwwbs_node_path_here
-        return
-    elif os.path.exists(bwwbs_node_path_brother):
-        BBWWS_NODE_FOLDER = bwwbs_node_path_brother
+    elif os.path.exists(bwwbs_node_path_not_compiled):
+        BBWWS_NODE_FOLDER = bwwbs_node_path_not_compiled
         return
     else:
         tkmessagebox.showerror("Error", "Bulk WhatsAppWeb Sender is not present!")
@@ -38,10 +37,13 @@ def find_BBWBS_cli():
 
 def init_BBWBS_cli():
     try:
-        if subprocess.run("node -v", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT).returncode < 0:
-            raise Exception("")
-    except:
-        tkmessagebox.showerror("Error", "Node.js is not installed!")
+        subprocess.run("node -v", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, check=True)
+    except subprocess.CalledProcessError:
+        tkmessagebox.showerror("Error", "Node.js is not installed!\n Trying to install it...")
+        out = install_node_js()
+        if not out[0]:
+            tkmessagebox.showerror("Error", out[1]+"\nPlease install Node.js manually and try again.")
+            exit()
 
     find_BBWBS_cli()
 
@@ -152,7 +154,7 @@ if __name__ == '__main__':
 
     message_label = ttk.Label(root, text='✉️ Message:')
     message_label.grid(row=1, column=0, sticky='W', padx=10, pady=10)
-    message_entry = st.ScrolledText(root, width=40, height=5)
+    message_entry = st.ScrolledText(root, width=40, height=5)   # TODO handle emojis properly
     message_entry.grid(row=1, column=1, columnspan=2, sticky='E', padx=10, pady=10)
     # message set in start_BBWBS_cli()
 

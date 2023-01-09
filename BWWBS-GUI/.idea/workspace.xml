@@ -5,6 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed20ae25-573f-40a0-987f-9a6decf84630" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.github/workflows/npm-publish.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.github/workflows/npm-publish.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Freeze Requirements File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -44,7 +50,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -85,7 +91,11 @@
       <workItem from="1673109874903" duration="4920000" />
       <workItem from="1673132959761" duration="233000" />
       <workItem from="1673133212035" duration="5847000" />
-      <workItem from="1673186303861" duration="1756000" />
+      <workItem from="1673186303861" duration="2509000" />
+      <workItem from="1673209451103" duration="41000" />
+      <workItem from="1673256064170" duration="103000" />
+      <workItem from="1673256624729" duration="350000" />
+      <workItem from="1673257072616" duration="1752000" />
     </task>
     <servers />
   </component>
@@ -99,16 +109,6 @@
           <url>file://$PROJECT_DIR$/main.py</url>
           <line>125</line>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py</url>
-          <line>4</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>44</line>
-          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
@@ -130,11 +130,16 @@
           <line>120</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py</url>
+          <line>4</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BWWBS_GUI$main.coverage" NAME="main Coverage Results" MODIFIED="1673139072730" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/BWWBS_GUI$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1673133625561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/BWWBS_GUI$main.coverage" NAME="main Coverage Results" MODIFIED="1673258823380" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BWWBS_GUI$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1673258218202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
   </component>
 </project>
