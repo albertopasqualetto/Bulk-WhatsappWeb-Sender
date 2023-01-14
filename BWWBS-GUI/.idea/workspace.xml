@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed20ae25-573f-40a0-987f-9a6decf84630" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../BWWBS-GUI-2.1.1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI-2.1.2.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +101,8 @@
       <workItem from="1673354794634" duration="39000" />
       <workItem from="1673354847541" duration="331000" />
       <workItem from="1673695413596" duration="189000" />
-      <workItem from="1673713635777" duration="315000" />
+      <workItem from="1673713635777" duration="4599000" />
+      <workItem from="1673718345657" duration="715000" />
     </task>
     <servers />
   </component>
@@ -107,19 +114,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>126</line>
+          <line>170</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py</url>
-          <line>4</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BWWBS_GUI$main.coverage" NAME="main Coverage Results" MODIFIED="1673713948409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/BWWBS_GUI$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1673258218202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
+    <SUITE FILE_PATH="coverage/BWWBS_GUI$main.coverage" NAME="main Coverage Results" MODIFIED="1673718162450" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BWWBS_GUI$scratch.coverage" NAME="scratch Coverage Results" MODIFIED="1673717375445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$APPLICATION_CONFIG_DIR$/scratches" />
   </component>
 </project>

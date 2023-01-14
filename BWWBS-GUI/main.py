@@ -1,6 +1,8 @@
+# to build: pyinstaller .\main.py -F
 # TODO rename?
 # TODO render emoji correctly in labels
 # TODO create a package?
+# TODO icon
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as tkmessagebox
@@ -13,8 +15,12 @@ import sys
 import os
 import subprocess
 
+import requests
+import webbrowser
+
 
 global BBWWS_NODE_FOLDER
+global VERSION
 global NUMBERS_FILE
 global MESSAGE
 global MEDIA_TO_SEND_LIST
@@ -49,6 +55,44 @@ def init_BBWBS_cli():
 
     global BBWWS_NODE_FOLDER
     subprocess.run("npm install --omit=dev", cwd=BBWWS_NODE_FOLDER, shell=True)
+
+
+def get_BWWBS_cli_version():
+    global BBWWS_NODE_FOLDER
+    global VERSION
+    out = subprocess.run("npm view . version", cwd=BBWWS_NODE_FOLDER, shell=True, capture_output=True)
+    VERSION = out.stdout.decode("utf-8").strip()
+    return VERSION
+
+
+def check_for_updates(tk_root):
+    global VERSION
+    get_BWWBS_cli_version()
+    response = requests.get('https://api.github.com/repos/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest')
+    if response.status_code == 200:
+        latest_version = response.json()['tag_name'].strip('v')
+        if latest_version != VERSION:
+            popup_update(tk_root)
+
+
+def popup_update(tk_root):  # TODO window does not appear on top
+    pop = tk.Toplevel(tk_root)
+    pop.wm_title("Update available")
+
+    label_pop = ttk.Label(pop, text="A new version of Bulk-WhatsAppWeb-Sender is available!")
+    label_pop.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+
+    label2_pop = ttk.Label(pop, text="Please download it from:")
+    label2_pop.grid(row=1, column=0, padx=2)
+
+    link = ttk.Label(pop, text="https://github.com/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest", foreground="blue", cursor="hand2")
+    link.grid(row=1, column=1, padx=1)
+    link.bind("<Button-1>", lambda e: webbrowser.open_new("https://github.com/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest"))
+
+    ok_pop = ttk.Button(pop, text="OK", command=pop.destroy)
+    ok_pop.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+
+    pop.mainloop()
 
 
 # button commands methods
@@ -103,7 +147,7 @@ def start_BBWBS_cli():
     MESSAGE = message_entry.get("1.0", "end-1c")
     DELAY_VAR = int(delay_tk_var.get())
 
-    string_to_run = "npm run start -- --numbers " + NUMBERS_FILE
+    # string_to_run = "npm run start -- --numbers " + NUMBERS_FILE
     string_to_run = "node ./index.js --numbers " + NUMBERS_FILE
 
     if MESSAGE != "":
@@ -190,5 +234,7 @@ if __name__ == '__main__':
 
     continue_in_terminal_label = ttk.Label(root, text='Then continue in terminal and scan the QR code...')
     continue_in_terminal_label.grid(row=6, column=0, columnspan=3, sticky='N', padx=10, pady=5)
+
+    check_for_updates(root)
 
     root.mainloop()
