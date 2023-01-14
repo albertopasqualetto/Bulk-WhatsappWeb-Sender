@@ -43,7 +43,7 @@ export default function askInput(callback){
             if(options.message === false)                               //flag --no-message
                 messageToSend = '';
             else if(typeof options.message === 'undefined' && typeof options.textFile === 'undefined')   //not specified as a parameter -> using inquirer's answer
-                messageToSend = answers.message;
+                messageToSend = answers.message;    //TODO message should be modified in order to not auto escape /n to //n
             else if(typeof options.message !== 'undefined'){    //flag --message
                 if(options.message !== true)                    //message not empty
                     messageToSend = options.message.trim();

@@ -48,7 +48,7 @@ def init_BBWBS_cli():
     find_BBWBS_cli()
 
     global BBWWS_NODE_FOLDER
-    subprocess.run("npm install", cwd=BBWWS_NODE_FOLDER, shell=True)
+    subprocess.run("npm install --omit=dev", cwd=BBWWS_NODE_FOLDER, shell=True)
 
 
 # button commands methods

@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed20ae25-573f-40a0-987f-9a6decf84630" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.github/workflows/npm-publish.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.github/workflows/npm-publish.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/questions.js" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/questions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +50,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;discord-application&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -91,7 +95,10 @@
       <workItem from="1673209451103" duration="41000" />
       <workItem from="1673256064170" duration="103000" />
       <workItem from="1673256624729" duration="350000" />
-      <workItem from="1673257072616" duration="2183000" />
+      <workItem from="1673257072616" duration="2255000" />
+      <workItem from="1673354794634" duration="39000" />
+      <workItem from="1673354847541" duration="331000" />
+      <workItem from="1673695413596" duration="189000" />
     </task>
     <servers />
   </component>
