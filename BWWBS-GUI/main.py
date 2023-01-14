@@ -107,7 +107,7 @@ def start_BBWBS_cli():
     string_to_run = "node ./index.js --numbers " + NUMBERS_FILE
 
     if MESSAGE != "":
-        string_to_run += " --message " + MESSAGE
+        string_to_run += ' --message "' + MESSAGE + '"'
     else:
         string_to_run += " --no-message"
 
