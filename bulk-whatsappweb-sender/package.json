@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "browser-paths": "github:albertopasqualetto/browser-paths",
-    "commander": "^9.4.1",
+    "commander": "^10.0.0",
     "inquirer": "^9.1.4",
     "inquirer-file-tree-selection-prompt": "^2.0.5",
     "libphonenumber-js": "^1.10.15",
