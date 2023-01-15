@@ -5,12 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed20ae25-573f-40a0-987f-9a6decf84630" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BWWBS-GUI-2.1.1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI-2.1.2.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../bulk-whatsappweb-sender/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
@@ -103,6 +97,7 @@
       <workItem from="1673695413596" duration="189000" />
       <workItem from="1673713635777" duration="4599000" />
       <workItem from="1673718345657" duration="715000" />
+      <workItem from="1673809190952" duration="611000" />
     </task>
     <servers />
   </component>

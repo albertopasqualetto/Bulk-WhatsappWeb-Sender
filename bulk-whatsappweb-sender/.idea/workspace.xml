@@ -5,10 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bb12605-ee73-4f8e-b4d2-daeacc7ea93f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BWWBS-GUI/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BWWBS-GUI/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
@@ -41,6 +37,9 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/inquirer/lib/inquirer.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/node_modules/inquirer/lib/prompts/base.js" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/node_modules/inquirer/lib/prompts/input.js" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/node_modules/libphonenumber-js/index.d.ts" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -166,6 +165,7 @@
       <workItem from="1673289211578" duration="131000" />
       <workItem from="1673364538470" duration="28000" />
       <workItem from="1673714615903" duration="1427000" />
+      <workItem from="1673809164307" duration="638000" />
     </task>
     <servers />
   </component>
