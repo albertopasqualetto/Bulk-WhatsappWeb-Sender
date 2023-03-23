@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6bb12605-ee73-4f8e-b4d2-daeacc7ea93f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BWWBS-GUI/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BWWBS-GUI/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BWWBS-GUI/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../BWWBS-GUI/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../numbers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../numbers.txt" afterDir="false" />
     </list>
@@ -66,7 +65,7 @@
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;18.12.0&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;18.11.17&quot;,
     &quot;js.last.introduce.type&quot;: &quot;LET&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/alber/Desktop/browser-paths&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/alber/Desktop/restaurantMaps&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -183,7 +182,9 @@
       <workItem from="1673809164307" duration="1050000" />
       <workItem from="1674783306111" duration="273000" />
       <workItem from="1675461476034" duration="71000" />
-      <workItem from="1676168924604" duration="301000" />
+      <workItem from="1676168924604" duration="498000" />
+      <workItem from="1677780218723" duration="29000" />
+      <workItem from="1679564578279" duration="290000" />
     </task>
     <servers />
   </component>
