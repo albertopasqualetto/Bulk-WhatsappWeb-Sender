@@ -31,7 +31,7 @@
     "libphonenumber-js": "^1.10.24",
     "mime-types": "^2.1.35",
     "press-any-key": "^0.1.1",
-    "puppeteer-core": "^19.7.5",
+    "puppeteer-core": "^20.2.0",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.19.5"
   },
