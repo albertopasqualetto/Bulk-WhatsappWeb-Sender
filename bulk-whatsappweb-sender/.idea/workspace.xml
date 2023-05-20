@@ -56,32 +56,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;18.12.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;18.11.17&quot;,
-    &quot;js.last.introduce.type&quot;: &quot;LET&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/alber/Desktop/restaurantMaps&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\alber\\AppData\\Local\\JetBrains\\Toolbox\\apps\\WebStorm\\ch-0\\223.7571.168\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "javascript.nodejs.core.library.configured.version": "18.16.0",
+    "javascript.nodejs.core.library.typings.version": "18.16.0",
+    "js.last.introduce.type": "LET",
+    "last_opened_file_path": "C:/Users/alber/Desktop/restaurantMaps",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "settings.sync",
+    "ts.external.directory.path": "C:\\Users\\alber\\AppData\\Local\\JetBrains\\Toolbox\\apps\\WebStorm\\ch-0\\223.7571.168\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;JavaScript&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "JavaScript"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\alber\Desktop\Bulk-WhatsappWeb-Sender" />
@@ -124,8 +124,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start" />
-        <item itemvalue="Node.js.index.js" />
         <item itemvalue="npm.dev run" />
+        <item itemvalue="Node.js.index.js" />
       </list>
     </recent_temporary>
   </component>
@@ -184,7 +184,8 @@
       <workItem from="1675461476034" duration="71000" />
       <workItem from="1676168924604" duration="498000" />
       <workItem from="1677780218723" duration="29000" />
-      <workItem from="1679564578279" duration="290000" />
+      <workItem from="1679564578279" duration="385000" />
+      <workItem from="1684575625445" duration="41000" />
     </task>
     <servers />
   </component>
