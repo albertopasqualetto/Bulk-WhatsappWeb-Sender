@@ -1,7 +1,5 @@
 # Bulk-WhatsappWeb-Sender
 
-![](https://img.shields.io/github/downloads/albertopasqualetto/Bulk-WhatsappWeb-Sender/total?color=blue&label=Downloads)
-
 This tool permits people to send WhatsApp messages in bulk through WhatsApp Web, in the root folder you will find an already compiled file for the GUI.
 
 **This software is not completely reliable and tested!**
@@ -10,7 +8,7 @@ Actually there are [some bans reported by users](https://github.com/pedroslopez/
 
 ## How to
 
-Clone the repo, decompress it and use the main CLI or the GUI.
+**Clone** the repo, decompress it and use the main CLI or the GUI.
 An already compiled GUI can be found in the root folder.
 
 ---
