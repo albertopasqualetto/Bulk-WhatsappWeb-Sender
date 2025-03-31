@@ -24,19 +24,18 @@
     "build": " caxa --input . --output \"bwweb.exe\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/index.js\" "
   },
   "dependencies": {
-    "browser-paths": "github:albertopasqualetto/browser-paths",
-    "commander": "^10.0.1",
-    "inquirer": "^9.1.5",
+    "@puppeteer/browsers": "^2.8.0",
+    "browser-paths": "^1.1.6",
+    "commander": "^13.1.0",
+    "inquirer": "^9.3.7",
     "inquirer-file-tree-selection-prompt": "^2.0.5",
-    "libphonenumber-js": "^1.10.30",
-    "mime-types": "^2.1.35",
+    "libphonenumber-js": "^1.12.6",
+    "mime-types": "^3.0.1",
     "press-any-key": "^0.1.1",
-    "puppeteer-core": "^22.12.0",
+    "puppeteer-core": "^18.2.1",
     "qrcode-terminal": "0.12.0",
-    "whatsapp-web.js": "^1.20.0"
+    "whatsapp-web.js": "^1.27.0"
   },
   "devDependencies": {
-    "caxa": "^3.0.1",
-    "cross-env": "^7.0.3"
   }
 }

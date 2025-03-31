@@ -6,10 +6,10 @@ import os from 'os';
 // import fs from 'fs';     // was used in pkg compilation
 import path from 'path';
 import { program } from 'commander';
-import packageJSON from './package.json' assert  { type: 'json' };
+import packageJSON from './package.json' with { type: "json" };
 import { getChromiumPath } from "browser-paths";
 import acceptedRevs from './node_modules/puppeteer-core/lib/cjs/puppeteer/revisions.js';
-import { BrowserFetcher } from "puppeteer-core";
+import { install } from '@puppeteer/browsers'
 import pressAnyKey from 'press-any-key';
 
 // process.env.CAXA is true if compiled, undefined if no NO
@@ -38,8 +38,8 @@ program
 	.option('-F, --no-files', 'do not send files, overwrites \'--files\'')
 	.option('-d, --low-delay', 'send messages with a low delay, use this if you are confident that you won\'t be banned')
 	.option('-D, --high-delay', 'send messages with a high delay, use this if you are sending from a new/unused number (high probability of being banned)')
-	.option('-la, --local-auth', 'use LocalAuth authentication mode instead of NoAuth (keep your account logged in)', false)
-	.option('-lc, --local-chromium', 'use local Chromium executable instead of installed Chrome', false);
+	.option('-a, --local-auth', 'use LocalAuth authentication mode instead of NoAuth (keep your account logged in)', false)
+	.option('-c, --local-chromium', 'use local Chromium executable instead of installed Chrome', false);
 
 program.parse();
 global.options= program.opts();
@@ -77,13 +77,19 @@ if(compiled)
 
 
 
-async function downloadLocalChromium(){
+async function downloadLocalChromium(){	// TODO to be tested
 	// TODO Check if already downloaded
 
 	// Download Chromium
 	console.log('Downloading Chromium...');
-	const browserFetcher = new BrowserFetcher({path: './'});
-	const revisionInfo = await browserFetcher.download(acceptedRevs.PUPPETEER_REVISIONS.chromium);
-
-	return revisionInfo.executablePath;
+	const browserVersion = acceptedRevs.PUPPETEER_REVISIONS.chrome;
+	console.log(`Installing Chromium version: ${browserVersion}`);
+	
+	const options = {
+		browser: 'chrome',
+		buildId: browserVersion,
+	};
+	
+	const browser = await install(options);
+	return browser.executablePath;
 }

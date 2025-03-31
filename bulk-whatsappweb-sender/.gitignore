@@ -105,6 +105,6 @@ dist
 
 # whatsapp-web.js files
 .wwebjs_auth/
-
+.wwebjs_cache/
 
 *log.txt

@@ -22,7 +22,7 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
             executablePath: pupPath
         }
     });
-    
+
     client.initialize();
 
     client.on('qr', (qr) => {
