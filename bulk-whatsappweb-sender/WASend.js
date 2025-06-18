@@ -114,14 +114,14 @@ function parseNumber(number, country){
 
 function log(msg, error=false) {
     let today=new Date();
-    let formattedDateTime='['+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()+'] ';
+    let formattedDateTime = '[' + today.toISOString().slice(0, 19).replace('T', ' ') + '] ';
 
     if(!error){
-        console.log(msg);
+        console.log(formattedDateTime + "INFO: " + msg);
         log_file.write(formattedDateTime + "INFO: " + msg + '\n');
     }
     else{
-        console.error(msg);
+        console.error(formattedDateTime + "ERROR: " + msg);
         log_file.write(formattedDateTime + "ERROR: " + msg + '\n');
     }
 }
