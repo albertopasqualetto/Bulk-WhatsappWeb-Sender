@@ -98,7 +98,7 @@ def popup_update(tk_root):  # TODO window does not appear on top
 # button commands methods
 def select_numbers_file():
     filetypes = (
-        ('text files', '*.txt'),
+        ('CSV/Text files', '*.csv *.txt'),
         ('All files', '*.*')
     )
 
