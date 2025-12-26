@@ -1,6 +1,6 @@
 {
   "name": "bulk-whatsappweb-sender",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "author": {
     "name": "Alberto Pasqualetto",
     "email": "39854348+albertopasqualetto@users.noreply.github.com"
@@ -20,22 +20,19 @@
   "type": "module",
   "scripts": {
     "start": "node --no-warnings index.js",
-    "dev": "cross-env NODE_ENV=dev node index.js",
-    "build": " caxa --input . --output \"bwweb.exe\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/index.js\" "
+    "dev": "cross-env NODE_ENV=dev node index.js"
   },
   "dependencies": {
-    "@puppeteer/browsers": "^2.8.0",
+    "@puppeteer/browsers": "^2.11.0",
     "browser-paths": "^1.1.6",
-    "commander": "^13.1.0",
+    "commander": "^14.0.2",
     "inquirer": "^9.3.7",
     "inquirer-file-tree-selection-prompt": "^2.0.5",
-    "libphonenumber-js": "^1.12.6",
-    "mime-types": "^3.0.1",
-    "press-any-key": "^0.1.1",
-    "puppeteer-core": "^18.2.1",
+    "libphonenumber-js": "^1.12.33",
+    "mime-types": "^3.0.2",
+    "press-any-key": "^1.1.0",
+    "puppeteer-core": "^24.34.0",
     "qrcode-terminal": "0.12.0",
-    "whatsapp-web.js": "^1.27.0"
-  },
-  "devDependencies": {
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#main"
   }
 }
