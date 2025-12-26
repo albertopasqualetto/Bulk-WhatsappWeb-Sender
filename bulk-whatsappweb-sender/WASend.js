@@ -63,7 +63,6 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend){
 
                 //delay to try avoiding ban
                 await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));	//in ms
-                //await new Promise((resolve, reject) => setTimeout(resolve, 5000));	//in ms
             } //else nothing
         }
         await client.sendPresenceUnavailable();
@@ -87,15 +86,25 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
         //send "typing..."
         await thisChat.sendStateTyping();
 
-        //if message exists
-        if(messageToSend !== '')
+        const hasText = typeof messageToSend === 'string' && messageToSend.trim() !== '';
+        const hasMedia = Array.isArray(mediaToSend) && mediaToSend.length > 0;
+
+        if(hasMedia){
+            for(let mediaPath of mediaToSend){
+                const isVideo = mime.lookup(mediaPath).startsWith('video');
+                const sendOptions = {};
+
+                if(hasText)
+                    sendOptions.caption = messageToSend;
+                if(isVideo)
+                    sendOptions.sendMediaAsDocument = true;   // Workaround for library issue with videos
+
+                await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath), sendOptions);
+            }
+        }
+        else if(hasText){
             await thisChat.sendMessage(messageToSend);
-        //if media exists
-        for(let mediaPath of mediaToSend)
-            if (mime.lookup(mediaPath).startsWith('video'))     // This is necessary due to an issue with the library
-                await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath),{ sendMediaAsDocument: true });
-            else
-                await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath));
+        }
 
         log(chatId.split('@c.us')[0] + ": SENT");
     }
