@@ -20,8 +20,7 @@
   "type": "module",
   "scripts": {
     "start": "node --no-warnings index.js",
-    "dev": "cross-env NODE_ENV=dev node index.js",
-    "build": " caxa --input . --output \"bwweb.exe\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/index.js\" "
+    "dev": "cross-env NODE_ENV=dev node index.js"
   },
   "dependencies": {
     "@puppeteer/browsers": "^2.11.0",
