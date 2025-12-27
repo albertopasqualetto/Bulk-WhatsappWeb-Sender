@@ -27,8 +27,14 @@ global MESSAGE
 global MEDIA_TO_SEND_LIST
 global DELAY_VAR
 global ROOT
+global STATUS_VAR
+global PROGRESS_BAR
+global IS_BUSY
 
 ROOT = None
+STATUS_VAR = None
+PROGRESS_BAR = None
+IS_BUSY = False
 
 
 # init methods
@@ -41,32 +47,113 @@ def find_BBWBS_cli():
         BBWWS_NODE_FOLDER = bwwbs_node_path_not_compiled
         return
     else:
-        tkmessagebox.showerror("Error", "Bulk WhatsAppWeb Sender is not present!")
-        exit()
+        raise FileNotFoundError("Bulk WhatsAppWeb Sender is not present!")
 
 
 def init_BBWBS_cli():
     try:
-        subprocess.run("node -v", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, check=True)
-    except subprocess.CalledProcessError:
-        tkmessagebox.showerror("Error", "Node.js is not installed!\n Trying to install it...")
+        cmd = ["node", "-v"] if os.name == 'nt' else "node -v"
+        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, check=True, shell=True)
+    except (FileNotFoundError, subprocess.CalledProcessError):
         out = install_node_js()
         if not out[0]:
-            tkmessagebox.showerror("Error", out[1]+"\nPlease install Node.js manually and try again.")
-            exit()
+            raise RuntimeError(out[1] + "\nPlease install Node.js manually and try again.")
 
     find_BBWBS_cli()
 
     global BBWWS_NODE_FOLDER
-    subprocess.run("npm install --omit=dev", cwd=BBWWS_NODE_FOLDER, shell=True)
+    cmd = ["npm", "install", "--omit=dev"] if os.name == 'nt' else "npm install --omit=dev"
+    subprocess.run(cmd, cwd=BBWWS_NODE_FOLDER, check=True, shell=True)
 
 
 def get_BWWBS_cli_version():
     global BBWWS_NODE_FOLDER
     global VERSION
-    out = subprocess.run("npm view . version", cwd=BBWWS_NODE_FOLDER, shell=True, capture_output=True)
-    VERSION = out.stdout.decode("utf-8").strip()
+    cmd = ["npm", "view", ".", "version"] if os.name == 'nt' else "npm view . version"
+    out = subprocess.run(cmd, cwd=BBWWS_NODE_FOLDER, capture_output=True, text=True, shell=True)
+    VERSION = (out.stdout or "").strip()
     return VERSION
+
+
+def set_busy(is_busy: bool, message: str = ""):
+    global IS_BUSY
+    IS_BUSY = is_busy
+
+    if STATUS_VAR is not None:
+        STATUS_VAR.set(message if is_busy else "")
+
+    if PROGRESS_BAR is not None:
+        if is_busy:
+            # If it was previously hidden with grid_remove(), show it again.
+            try:
+                PROGRESS_BAR.grid()
+            except tk.TclError:
+                pass
+            try:
+                PROGRESS_BAR.configure(value=0)
+            except tk.TclError:
+                pass
+            PROGRESS_BAR.start(10)
+        else:
+            PROGRESS_BAR.stop()
+
+            # Keep the progress bar visible briefly after stopping,
+            # then hide it (unless a new job started in the meantime).
+            if ROOT is not None:
+                def hide_if_still_idle():
+                    if not IS_BUSY and PROGRESS_BAR is not None:
+                        try:
+                            PROGRESS_BAR.grid_remove()
+                        except tk.TclError:
+                            pass
+
+                ROOT.after(3000, hide_if_still_idle)
+
+    if ROOT is None:
+        return
+
+    # Block the whole UI while a background job runs.
+    try:
+        ROOT.attributes("-disabled", is_busy)
+        return
+    except tk.TclError:
+        # Fallback for platforms/window managers that don't support "-disabled".
+        pass
+
+    def set_children_state(widget, state):
+        for child in widget.winfo_children():
+            try:
+                child.configure(state=state)
+            except tk.TclError:
+                pass
+            set_children_state(child, state)
+
+    set_children_state(ROOT, tk.DISABLED if is_busy else tk.NORMAL)
+
+
+def run_background(job, busy_message: str, on_done=None):
+    if ROOT is None:
+        return
+
+    def runner():
+        err = None
+        res = None
+        try:
+            res = job()
+        except Exception as e:
+            err = e
+
+        def finish():
+            set_busy(False)
+            if err is not None:
+                tkmessagebox.showerror("Error", str(err))
+            if on_done is not None:
+                on_done(res, err)
+
+        ROOT.after(0, finish)
+
+    set_busy(True, busy_message)
+    threading.Thread(target=runner, daemon=True).start()
 
 
 def check_for_updates(tk_root):
@@ -198,13 +285,22 @@ def start_BBWBS_cli():
     elif DELAY_VAR == 1:
         args += ["--high-delay"]
 
-    try:
-        subprocess.run(args, cwd=BBWWS_NODE_FOLDER)
-    except FileNotFoundError:
-        tkmessagebox.showerror(
-            "Error",
-            "Failed to start the sender. Ensure Node.js is installed and available in PATH (the `node` command must work).",
-        )
+    def job():
+        if not BBWWS_NODE_FOLDER or not os.path.exists(BBWWS_NODE_FOLDER):
+            raise FileNotFoundError("Bulk WhatsAppWeb Sender folder not found.")
+        try:
+            cmd = args if os.name == 'nt' else " ".join(shlex.quote(str(a)) for a in args)
+            return subprocess.run(cmd, cwd=BBWWS_NODE_FOLDER, shell=True).returncode
+        except FileNotFoundError:
+            raise RuntimeError(
+                "Failed to start the sender. Ensure Node.js is installed and available in PATH (the `node` command must work)."
+            )
+
+    def done(res, err):
+        if err is None and isinstance(res, int) and res != 0:
+            tkmessagebox.showerror("Error", f"Sender exited with code {res}.")
+
+    run_background(job, "Running sender…", on_done=done)
 
 
 def export_contacts():
@@ -214,24 +310,20 @@ def export_contacts():
         tkmessagebox.showerror("Error", "Bulk WhatsAppWeb Sender folder not found.")
         return
 
-    def run_job():
-        try:
-            # Runs in terminal; QR is printed there.
-            proc = subprocess.run("npm run exportcontacts", cwd=BBWWS_NODE_FOLDER, shell=True)
-            out_file = os.path.join(BBWWS_NODE_FOLDER, "contacts.vcf")
+    def job():
+        # Runs in terminal; QR is printed there.
+        cmd = ["npm", "run", "exportcontacts"] if os.name == 'nt' else "npm run exportcontacts"
+        proc = subprocess.run(cmd, cwd=BBWWS_NODE_FOLDER, shell=True)
+        return proc.returncode
 
-            def on_done():
-                if proc.returncode == 0:
-                    tkmessagebox.showinfo("Done", f"Contacts exported to:\n{out_file}")
-                else:
-                    tkmessagebox.showerror("Error", "Export contacts failed. Check the terminal output.")
+    def done(res, err):
+        out_file = os.path.join(BBWWS_NODE_FOLDER, "contacts.vcf")
+        if err is None and res == 0:
+            tkmessagebox.showinfo("Done", f"Contacts exported to:\n{out_file}")
+        elif err is None:
+            tkmessagebox.showerror("Error", "Export contacts failed. Check the terminal output.")
 
-            ROOT.after(0, on_done)
-        finally:
-            ROOT.after(0, lambda: export_contacts_button.config(state=tk.NORMAL))
-
-    export_contacts_button.config(state=tk.DISABLED)
-    threading.Thread(target=run_job, daemon=True).start()
+    run_background(job, "Exporting contacts…", on_done=done)
 
 
 if __name__ == '__main__':
@@ -239,8 +331,6 @@ if __name__ == '__main__':
     MESSAGE = ''
     MEDIA_TO_SEND_LIST = []
     DELAY_VAR = 0
-
-    init_BBWBS_cli()
 
     root = tk.Tk()
     ROOT = root
@@ -301,6 +391,22 @@ if __name__ == '__main__':
     continue_in_terminal_label = ttk.Label(root, text='Then continue in terminal and scan the QR code...')
     continue_in_terminal_label.grid(row=8, column=0, columnspan=3, sticky='N', padx=10, pady=5)
 
-    check_for_updates(root)
+    STATUS_VAR = tk.StringVar(value="")
+    status_label = ttk.Label(root, textvariable=STATUS_VAR)
+    status_label.grid(row=9, column=0, columnspan=2, sticky='W', padx=10, pady=(0, 10))
+    PROGRESS_BAR = ttk.Progressbar(root, mode='indeterminate')
+    PROGRESS_BAR.grid(row=9, column=2, sticky='E', padx=10, pady=(0, 10))
+
+    def init_done(res, err):
+        if err is None:
+            check_for_updates(root)
+
+    def init_job():
+        try:
+            init_BBWBS_cli()
+        except Exception as e:
+            raise e
+
+    run_background(init_job, "Setting up… (installing dependencies)", on_done=init_done)
 
     root.mainloop()
