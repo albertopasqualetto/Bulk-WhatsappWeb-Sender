@@ -4,7 +4,7 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { pathToFileURL } from 'url';
 import cliProgress from 'cli-progress';
 
-import { createWAClient } from './WAClient.js';
+import { createWAClient, destroyClient } from './WAClient.js';
 import { detectCompiledRuntime, resolvePuppeteerExecutablePath } from './puppeteerSetup.js';
 
 const { SingleBar, Presets } = cliProgress;
@@ -117,16 +117,12 @@ export async function exportContacts({ outputDir = process.cwd() } = {}) {
       client.sendPresenceAvailable();
       await getAllNumbers(client, { outputDir });
       client.sendPresenceUnavailable();
-      await client.destroy();
-      process.exit(0);
     } catch (err) {
       console.error(err);
-      try {
-        await client.destroy();
-      } catch {
-        // ignore
-      }
-      process.exit(1);
+      process.exitCode = 1;
+    } finally {
+      await destroyClient(client);
+      process.exit();
     }
   });
 }

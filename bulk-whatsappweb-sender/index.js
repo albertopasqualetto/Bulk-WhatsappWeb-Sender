@@ -50,7 +50,6 @@ global.pupPath = await resolvePuppeteerExecutablePath({
   localChromium: options.localChromium,
 });
 
-
 askInput(sendMessages);   //Bootstrap
 
 

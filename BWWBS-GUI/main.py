@@ -1,8 +1,5 @@
-# to build: pyinstaller .\main.py -F
-# TODO rename?
 # TODO render emoji correctly in labels
 # TODO create a package?
-# TODO icon
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as tkmessagebox

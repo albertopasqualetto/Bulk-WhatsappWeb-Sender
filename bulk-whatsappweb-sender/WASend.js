@@ -1,7 +1,7 @@
 import wwebpkg from 'whatsapp-web.js';
 const { MessageMedia } = wwebpkg;
 
-import { createWAClient } from './WAClient.js';
+import { createWAClient, destroyClient } from './WAClient.js';
 import fs from 'fs';
 import cliProgress from 'cli-progress';
 
@@ -30,61 +30,66 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend) {
 
   client.on('ready', async () => {
     log('WWEB READY');
-    await client.sendPresenceAvailable();
-
-    let myNumberCountry = parsePhoneNumber("+" + (client.info.wid.user)).country;
-
-    let numbersArr;
     try {
-      numbersArr = readNumbersFromFile(numbersFile);
+      await client.sendPresenceAvailable();
+
+      let myNumberCountry = parsePhoneNumber("+" + (client.info.wid.user)).country;
+
+      let numbersArr;
+      try {
+        numbersArr = readNumbersFromFile(numbersFile);
+      } catch (err) {
+        log(err, true);
+        throw err;
+      }
+      const bar = new SingleBar({
+        format: 'Send messages |{bar}| {value}/{total} {percentage}% | ETA: {eta_formatted} | {suffix}',
+        hideCursor: true,
+      }, Presets.shades_classic);
+
+      let sentCount = 0;
+      let failedCount = 0;
+
+      const suffix = () => `sent:${sentCount} failed:${failedCount}`;
+
+      bar.start(Math.max(numbersArr.length, 1), 0, { suffix: suffix() });
+
+      for (const [idx, number] of numbersArr.entries()) {
+        let parsed_number = parseNumber(number, myNumberCountry);
+        if (parsed_number === null) {
+          failedCount += 1;
+          log(number + ": INVALID NUMBER", true);
+          bar.increment(1, { suffix: suffix() });
+          continue;
+        }
+
+        try {
+          const success = await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);
+          if (success) sentCount += 1;
+          else failedCount += 1;
+        } catch (err) {
+          failedCount += 1;
+          log(err, true);
+        }
+
+        bar.increment(1, { suffix: suffix() });
+
+        const isLast = idx === numbersArr.length - 1;
+        if (!isLast) {
+          await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));
+        }
+      }
+
+      bar.update(numbersArr.length, { suffix: suffix() });
+      bar.stop();
+
+      await client.sendPresenceUnavailable();
+      log('ALL DONE!');
     } catch (err) {
       log(err, true);
-      return;
+    } finally {
+      await destroyClient(client);
     }
-    const bar = new SingleBar({
-      format: 'Send messages |{bar}| {value}/{total} {percentage}% | ETA: {eta_formatted} | {suffix}',
-      hideCursor: true,
-    }, Presets.shades_classic);
-
-    let sentCount = 0;
-    let failedCount = 0;
-
-    const suffix = () => `sent:${sentCount} failed:${failedCount}`;
-
-    bar.start(Math.max(numbersArr.length, 1), 0, { suffix: suffix() });
-
-    for (const [idx, number] of numbersArr.entries()) {
-      let parsed_number = parseNumber(number, myNumberCountry);
-      if (parsed_number === null) {
-        failedCount += 1;
-        log(number + ": INVALID NUMBER", true);
-        bar.increment(1, { suffix: suffix() });
-        continue;
-      }
-
-      try {
-        const success = await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);
-        if (success) sentCount += 1;
-        else failedCount += 1;
-      } catch (err) {
-        failedCount += 1;
-        log(err, true);
-      }
-
-      bar.increment(1, { suffix: suffix() });
-
-      const isLast = idx === numbersArr.length - 1;
-      if (!isLast) {
-        await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));
-      }
-    }
-
-    bar.update(numbersArr.length, { suffix: suffix() });
-    bar.stop();
-
-    await client.sendPresenceUnavailable();
-    await client.destroy();
-    log('ALL DONE!');
   });
 }
 
