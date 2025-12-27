@@ -1,5 +1,8 @@
 from sys import platform
+import os
 import subprocess
+import tempfile
+import urllib.request
 from shutil import which
 
 
@@ -27,9 +30,31 @@ def install_node_js():
     elif platform == "darwin":
         # OS X
         try:
-            subprocess.run(["curl", "https://nodejs.org/dist/latest/node-${VERSION:-$(wget -qO- https://nodejs.org/dist/latest/ | sed -nE 's|.*>node-(.*)\\.pkg</a>.*|\\1|p')}.pkg", ">", '"$HOME/Downloads/node-latest.pkg"', "&&", 'sudo installer -store -pkg "$HOME/Downloads/node-latest.pkg"', '-target "/"'], shell=True, check=True)
+            if which('brew'):
+                subprocess.run(["brew", "install", "node"], check=True)
+                return True, ""
+
+            # Fallback: download the official installer package and run it.
+            url = "https://nodejs.org/dist/latest/node-latest.pkg"
+            pkg_path = None
+            try:
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pkg") as tmp:
+                    pkg_path = tmp.name
+
+                urllib.request.urlretrieve(url, pkg_path)
+
+                # Requires admin privileges; will prompt in the terminal.
+                subprocess.run(["sudo", "installer", "-pkg", pkg_path, "-target", "/"], check=True)
+            finally:
+                if pkg_path:
+                    try:
+                        os.remove(pkg_path)
+                    except OSError:
+                        pass
             return True, ""
         except subprocess.CalledProcessError:
+            return False, "Cannot install Node.js!"
+        except Exception:
             return False, "Cannot install Node.js!"
     elif platform == "win32":
         # Windows...
