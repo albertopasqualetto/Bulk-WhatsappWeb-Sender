@@ -112,14 +112,7 @@ def set_busy(is_busy: bool, message: str = ""):
     if ROOT is None:
         return
 
-    # Block the whole UI while a background job runs.
-    try:
-        ROOT.attributes("-disabled", is_busy)
-        return
-    except tk.TclError:
-        # Fallback for platforms/window managers that don't support "-disabled".
-        pass
-
+    # Disable UI elements while a background job runs (but allow window to be moved).
     def set_children_state(widget, state):
         for child in widget.winfo_children():
             try:
@@ -335,6 +328,7 @@ if __name__ == '__main__':
     root = tk.Tk()
     ROOT = root
     root.title('BWWBS-GUI')
+    root.iconphoto(False, tk.PhotoImage(file=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'icon.png')))
     # root.geometry('400x400')
     # root.configure(background='white')
     root.columnconfigure(0, weight=1)
