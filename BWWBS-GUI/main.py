@@ -14,6 +14,7 @@ from node_js_install import install_node_js
 import sys
 import os
 import subprocess
+import threading
 
 import requests
 import webbrowser
@@ -25,6 +26,9 @@ global NUMBERS_FILE
 global MESSAGE
 global MEDIA_TO_SEND_LIST
 global DELAY_VAR
+global ROOT
+
+ROOT = None
 
 
 # init methods
@@ -66,12 +70,13 @@ def get_BWWBS_cli_version():
 
 
 def check_for_updates(tk_root):
+    from packaging.version import Version
     global VERSION
     get_BWWBS_cli_version()
     response = requests.get('https://api.github.com/repos/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest')
     if response.status_code == 200:
-        latest_version = response.json()['tag_name'].strip('v')
-        if latest_version != VERSION:
+        remote_version = response.json()['tag_name'].strip('v')
+        if Version(remote_version) > Version(VERSION):
             popup_update(tk_root)
 
 
@@ -98,7 +103,7 @@ def popup_update(tk_root):  # TODO window does not appear on top
 # button commands methods
 def select_numbers_file():
     filetypes = (
-        ('CSV/Text files', '*.csv *.txt'),
+        ('CSV/Text/VCF files', '*.csv *.txt *.vcf'),
         ('All files', '*.*')
     )
 
@@ -171,19 +176,43 @@ def start_BBWBS_cli():
     subprocess.run(string_to_run, cwd=BBWWS_NODE_FOLDER)
 
 
+def export_contacts():
+    global BBWWS_NODE_FOLDER
+    global ROOT
+    if not BBWWS_NODE_FOLDER or not os.path.exists(BBWWS_NODE_FOLDER):
+        tkmessagebox.showerror("Error", "Bulk WhatsAppWeb Sender folder not found.")
+        return
+
+    def run_job():
+        try:
+            # Runs in terminal; QR is printed there.
+            proc = subprocess.run("npm run exportcontacts", cwd=BBWWS_NODE_FOLDER, shell=True)
+            out_file = os.path.join(BBWWS_NODE_FOLDER, "contacts.vcf")
+
+            def on_done():
+                if proc.returncode == 0:
+                    tkmessagebox.showinfo("Done", f"Contacts exported to:\n{out_file}")
+                else:
+                    tkmessagebox.showerror("Error", "Export contacts failed. Check the terminal output.")
+
+            ROOT.after(0, on_done)
+        finally:
+            ROOT.after(0, lambda: export_contacts_button.config(state=tk.NORMAL))
+
+    export_contacts_button.config(state=tk.DISABLED)
+    threading.Thread(target=run_job, daemon=True).start()
+
+
 if __name__ == '__main__':
-    global NUMBERS_FILE
     NUMBERS_FILE = ''
-    global MESSAGE
     MESSAGE = ''
-    global MEDIA_TO_SEND_LIST
     MEDIA_TO_SEND_LIST = []
-    global DELAY_VAR
     DELAY_VAR = 0
 
     init_BBWBS_cli()
 
     root = tk.Tk()
+    ROOT = root
     root.title('BWWBS-GUI')
     # root.geometry('400x400')
     # root.configure(background='white')
@@ -191,27 +220,33 @@ if __name__ == '__main__':
     root.columnconfigure(1, weight=2)
     root.columnconfigure(2, weight=1)
 
+
+    export_contacts_button = ttk.Button(root, text='📥 EXPORT CONTACTS', command=export_contacts)
+    export_contacts_button.grid(row=0, column=0, columnspan=3, sticky='EW', padx=10, pady=(10, 5))
+
+    ttk.Separator(root, orient='horizontal').grid(row=1, column=0, columnspan=3, sticky='EW', padx=10, pady=10)
+
     numbers_file_button = ttk.Button(root, text='📞 Select Numbers File', command=select_numbers_file)
-    numbers_file_button.grid(row=0, column=0, sticky='W', padx=10, pady=10)
+    numbers_file_button.grid(row=2, column=0, sticky='W', padx=10, pady=10)
     selected_numbers_file_path_label = ttk.Label(root, text=NUMBERS_FILE)
-    selected_numbers_file_path_label.grid(row=0, column=1, columnspan=2, sticky='E', padx=10, pady=10)
+    selected_numbers_file_path_label.grid(row=2, column=1, columnspan=2, sticky='E', padx=10, pady=10)
 
     message_label = ttk.Label(root, text='✉️ Message:')
-    message_label.grid(row=1, column=0, sticky='W', padx=10, pady=10)
+    message_label.grid(row=3, column=0, sticky='W', padx=10, pady=10)
     message_entry = st.ScrolledText(root, width=40, height=5)   # TODO handle emojis properly
-    message_entry.grid(row=1, column=1, columnspan=2, sticky='E', padx=10, pady=10)
+    message_entry.grid(row=3, column=1, columnspan=2, sticky='E', padx=10, pady=10)
     # message set in start_BBWBS_cli()
 
     media_to_send_button = ttk.Button(root, text='📷 Select Media to Send', command=select_media_files)
-    media_to_send_button.grid(row=2, column=0, sticky='W', padx=10, pady=10)
+    media_to_send_button.grid(row=4, column=0, sticky='W', padx=10, pady=10)
     selected_media_to_send_paths_label = ttk.Label(root, text=MEDIA_TO_SEND_LIST)
-    selected_media_to_send_paths_label.grid(row=2, column=1, sticky='E', padx=10, pady=10)
+    selected_media_to_send_paths_label.grid(row=4, column=1, sticky='E', padx=10, pady=10)
     clear_media_to_send_button = ttk.Button(root, text='❌', command=clear_selected_media_files, width=3)
     ToolTip(clear_media_to_send_button, 'Clear all selected media', delay=1.0)
-    clear_media_to_send_button.grid(row=2, column=2, sticky='E', padx=10, pady=10)
+    clear_media_to_send_button.grid(row=4, column=2, sticky='E', padx=10, pady=10)
 
     delay_label = ttk.Label(root, text='⏱️ Delay:')
-    delay_label.grid(row=3, column=0, sticky='W', padx=10, pady=10)
+    delay_label.grid(row=5, column=0, sticky='W', padx=10, pady=10)
     delay_tk_var = tk.StringVar(None, '0')  # 0 means default delay, -1 means low delay, 1 means high delay
     radio_low = ttk.Radiobutton(root, text='Low Delay', variable=delay_tk_var, value=-1)
     radio_default = ttk.Radiobutton(root, text='Default Delay', variable=delay_tk_var, value=0)
@@ -219,21 +254,21 @@ if __name__ == '__main__':
     ToolTip(radio_low, msg="Send messages with a low delay, use this if you are confident that you won't be banned", delay=1.0)
     ToolTip(radio_default, msg="Default delay", delay=1.0)
     ToolTip(radio_high, msg="Send messages with a high delay, use this if you are sending from a new/unused number (high probability of being banned)", delay=1.0)
-    radio_low.grid(row=3, column=1, columnspan=2, sticky='W', padx=10, pady=10)
-    radio_default.grid(row=3, column=1, columnspan=2, sticky='N', padx=10, pady=10)
-    radio_high.grid(row=3, column=1, columnspan=2, sticky='E', padx=10, pady=10)
+    radio_low.grid(row=5, column=1, columnspan=2, sticky='W', padx=10, pady=10)
+    radio_default.grid(row=5, column=1, columnspan=2, sticky='N', padx=10, pady=10)
+    radio_high.grid(row=5, column=1, columnspan=2, sticky='E', padx=10, pady=10)
     # Delay set in start_BBWBS_cli()
 
     # TODO local-auth and local-chromium ?
     # TODO show qrcode and output in gui
 
-    ttk.Separator(root, orient='horizontal').grid(row=4, column=0, columnspan=3, sticky='EW', padx=10, pady=10)
+    ttk.Separator(root, orient='horizontal').grid(row=6, column=0, columnspan=3, sticky='EW', padx=10, pady=10)
 
     send_button = ttk.Button(root, text='🚀 SEND MESSAGES', command=start_BBWBS_cli)
-    send_button.grid(row=5, column=0, columnspan=3, sticky='EW', padx=10, pady=5)
+    send_button.grid(row=7, column=0, columnspan=3, sticky='EW', padx=10, pady=5)
 
     continue_in_terminal_label = ttk.Label(root, text='Then continue in terminal and scan the QR code...')
-    continue_in_terminal_label.grid(row=6, column=0, columnspan=3, sticky='N', padx=10, pady=5)
+    continue_in_terminal_label.grid(row=8, column=0, columnspan=3, sticky='N', padx=10, pady=5)
 
     check_for_updates(root)
 

@@ -1,7 +1,7 @@
 import wwebpkg from 'whatsapp-web.js';
-const { Client, LocalAuth, NoAuth, MessageMedia } = wwebpkg;
+const { MessageMedia } = wwebpkg;
 
-import qrcode from 'qrcode-terminal';
+import { createWAClient } from './WAClient.js';
 import fs from 'fs';
 
 import parsePhoneNumber from 'libphonenumber-js';
@@ -11,133 +11,162 @@ import mime from 'mime-types';
 import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-const log_file = fs.createWriteStream(__dirname + '/log.txt', {flags: 'w'});
+const log_file = fs.createWriteStream(__dirname + '/log.txt', { flags: 'w' });
 
 //Whatsapp magic
-export default function sendMessages(numbersFile, messageToSend, mediaToSend){
-    const client = new Client({
-        authStrategy: options.localAuth ? new LocalAuth() : new NoAuth(),
-        puppeteer: {
-            headless: process.env.NODE_ENV === 'dev' ? false : true,
-            executablePath: pupPath
-        }
-    });
+export default function sendMessages(numbersFile, messageToSend, mediaToSend) {
+  const options = global.options;
+  const pupPath = global.pupPath;
+  const delayms = global.delayms;
 
-    client.initialize();
+  const client = createWAClient({
+    localAuth: options.localAuth,
+    headless: process.env.NODE_ENV === 'dev' ? false : true,
+    executablePath: pupPath,
+  });
 
-    client.on('qr', (qr) => {
-        // NOTE: This event will not be fired if a session is specified.
-        qrcode.generate(qr, {small: true});
-    });
+  client.on('ready', async () => {
+    log('WWEB READY');
+    await client.sendPresenceAvailable();
 
-    client.on('auth_failure', msg => {
-        // Fired if session restore was unsuccessful
-        log('WWEB AUTHENTICATION FAILURE'+msg, true);
-    });
+    let myNumberCountry = parsePhoneNumber("+" + (client.info.wid.user)).country;
 
+    let numbersArr;
+    try {
+      numbersArr = readNumbersFromFile(numbersFile);
+    } catch (err) {
+      log(err, true);
+      return;
+    }
 
-    client.on('ready', async () => {
-        log('WWEB READY');
-        await client.sendPresenceAvailable();
-
-        let my_number_country = parsePhoneNumber("+" + (client.info.wid.user)).country;
-
-        let numbersArr;
-        try{
-            //const numbers = fs.readFileSync(path.resolve('numbers.txt'));
-            const numbers = fs.readFileSync(numbersFile);
-            numbersArr = numbers.toString().split(",");
-        } catch(err){
-            log(err,true);
+    for (let number of numbersArr) {
+      if (number !== '') {
+        let parsed_number = parseNumber(number, myNumberCountry);
+        if (parsed_number === null) {
+          log(number + ": INVALID NUMBER", true);
+          continue;
         }
 
-        for(let number of numbersArr) {
-            if(number !== '') {
-                let parsed_number = parseNumber(number, my_number_country);
-                if(parsed_number === null) {    //if number is not valid skip it
-                    log(number + ": INVALID NUMBER", true);
-                    continue;
-                }
+        await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);
+        await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));
+      }
+    }
 
-                await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);   //'@c.us' represents a person's userdId
+    await client.sendPresenceUnavailable();
+    await client.destroy();
+    log('ALL DONE!');
+  });
+}
 
-                //delay to try avoiding ban
-                await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));	//in ms
-            } //else nothing
-        }
-        await client.sendPresenceUnavailable();
-        await client.destroy();
-        log('ALL DONE!');
-    });
+function readNumbersFromFile(numbersFile) {
+  const content = fs.readFileSync(numbersFile).toString();
+  const isVcf = String(numbersFile).toLowerCase().endsWith('.vcf') || /BEGIN:VCARD/i.test(content);
+
+  let rawNumbers = [];
+
+  if (isVcf) {
+    rawNumbers = extractNumbersFromVcf(content);
+  } else {
+    rawNumbers = extractNumbersFromText(content);
+  }
+  return rawNumbers.map((n) => String(n).trim()).filter(Boolean);
+}
+
+function extractNumbersFromText(content) {
+  // Backward compatible: supports comma-separated and newline-separated lists.
+  return content.split(/,|\r?\n/);
+}
+
+function extractNumbersFromVcf(vcfContent) {
+  // Unfold RFC6350 folded lines: CRLF + (space/tab) indicates continuation.
+  const unfolded = vcfContent.replace(/\r?\n[\t ]/g, '');
+  const lines = unfolded.split(/\r?\n/);
+  const numbers = [];
+
+  for (const line of lines) {
+    const match = /^TEL[^:]*:(.*)$/i.exec(line);
+    if (!match) continue;
+
+    let value = (match[1] ?? '').trim();
+    if (!value) continue;
+
+    // Common forms: tel:+123..., TEL;TYPE=CELL:+123..., TEL;VALUE=uri:tel:+123...
+    value = value.replace(/^tel:/i, '');
+    value = value.replace(/^uri:tel:/i, '');
+
+    numbers.push(value);
+  }
+
+  return numbers;
 }
 
 
-async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend){
-    //if number is not on Whatsapp
-    if(! (await WWebClient.isRegisteredUser(chatId))){
-        log(chatId.split('@c.us')[0] + ": NOT ON WHATSAPP");
+async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend) {
+  //if number is not on Whatsapp
+  if (!(await WWebClient.isRegisteredUser(chatId))) {
+    log(chatId.split('@c.us')[0] + ": NOT ON WHATSAPP");
+  }
+  else {
+    let thisChat = await WWebClient.getChatById(chatId);
+
+    //send seen
+    await thisChat.sendSeen();
+
+    //send "typing..."
+    await thisChat.sendStateTyping();
+
+    const hasText = typeof messageToSend === 'string' && messageToSend.trim() !== '';
+    const hasMedia = Array.isArray(mediaToSend) && mediaToSend.length > 0;
+
+    if (hasMedia) {
+      for (let mediaPath of mediaToSend) {
+        const isVideo = mime.lookup(mediaPath).startsWith('video');
+        const sendOptions = {};
+
+        if (hasText)
+          sendOptions.caption = messageToSend;
+        if (isVideo)
+          sendOptions.sendMediaAsDocument = true;   // Workaround for library issue with videos
+
+        await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath), sendOptions);
+      }
     }
-    else{
-        let thisChat = await WWebClient.getChatById(chatId);
-
-        //send seen
-        await thisChat.sendSeen();
-
-        //send "typing..."
-        await thisChat.sendStateTyping();
-
-        const hasText = typeof messageToSend === 'string' && messageToSend.trim() !== '';
-        const hasMedia = Array.isArray(mediaToSend) && mediaToSend.length > 0;
-
-        if(hasMedia){
-            for(let mediaPath of mediaToSend){
-                const isVideo = mime.lookup(mediaPath).startsWith('video');
-                const sendOptions = {};
-
-                if(hasText)
-                    sendOptions.caption = messageToSend;
-                if(isVideo)
-                    sendOptions.sendMediaAsDocument = true;   // Workaround for library issue with videos
-
-                await thisChat.sendMessage(MessageMedia.fromFilePath(mediaPath), sendOptions);
-            }
-        }
-        else if(hasText){
-            await thisChat.sendMessage(messageToSend);
-        }
-
-        log(chatId.split('@c.us')[0] + ": SENT");
+    else if (hasText) {
+      await thisChat.sendMessage(messageToSend);
     }
+
+    log(chatId.split('@c.us')[0] + ": SENT");
+  }
 }
 
-function parseNumber(number, country){
-    try{
-        let parsed = parsePhoneNumber(number, country);
-        return parsed.number.toString().replace(/[- )(+]/g, '');    //clean number
-    } catch(err){
-        log(err,true);
-        return null;
-    }
+function parseNumber(number, country) {
+  try {
+    let parsed = parsePhoneNumber(number, country);
+    return parsed.number.toString().replace(/[- )(+]/g, '');    //clean number
+  } catch (err) {
+    log(err, true);
+    return null;
+  }
 }
 
 
-function log(msg, error=false) {
-    let today=new Date();
-    let formattedDateTime = '[' + today.toISOString().slice(0, 19).replace('T', ' ') + '] ';
+function log(msg, error = false) {
+  let today = new Date();
+  let formattedDateTime = '[' + today.toISOString().slice(0, 19).replace('T', ' ') + '] ';
 
-    if(!error){
-        console.log(formattedDateTime + "INFO: " + msg);
-        log_file.write(formattedDateTime + "INFO: " + msg + '\n');
-    }
-    else{
-        console.error(formattedDateTime + "ERROR: " + msg);
-        log_file.write(formattedDateTime + "ERROR: " + msg + '\n');
-    }
+  if (!error) {
+    console.log(formattedDateTime + "INFO: " + msg);
+    log_file.write(formattedDateTime + "INFO: " + msg + '\n');
+  }
+  else {
+    console.error(formattedDateTime + "ERROR: " + msg);
+    log_file.write(formattedDateTime + "ERROR: " + msg + '\n');
+  }
 }
 
 
 function randBetween(min, max) {
-	return Math.floor(
-	  	Math.random() * (max - min + 1) + min
-	)
+  return Math.floor(
+    Math.random() * (max - min + 1) + min
+  )
 }
