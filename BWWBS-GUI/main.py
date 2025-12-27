@@ -70,14 +70,35 @@ def get_BWWBS_cli_version():
 
 
 def check_for_updates(tk_root):
-    from packaging.version import Version
-    global VERSION
-    get_BWWBS_cli_version()
-    response = requests.get('https://api.github.com/repos/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest')
-    if response.status_code == 200:
-        remote_version = response.json()['tag_name'].strip('v')
-        if Version(remote_version) > Version(VERSION):
-            popup_update(tk_root)
+    def worker():
+        try:
+            from packaging.version import Version
+
+            global VERSION
+            get_BWWBS_cli_version()
+
+            response = requests.get(
+                'https://api.github.com/repos/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest',
+                headers={"User-Agent": "BWWBS-GUI"},
+                timeout=5,
+            )
+            if response.status_code != 200:
+                return
+
+            remote_version = response.json().get('tag_name', '').strip().lstrip('v')
+            if not remote_version or not VERSION:
+                return
+
+            if Version(remote_version) > Version(VERSION):
+                tk_root.after(0, lambda: popup_update(tk_root))
+        except requests.RequestException:
+            # Offline / slow network / GitHub blocked: don't block or crash the GUI.
+            return
+        except Exception:
+            # Any parsing/version errors shouldn't impact startup.
+            return
+
+    threading.Thread(target=worker, daemon=True).start()
 
 
 def popup_update(tk_root):  # TODO window does not appear on top
