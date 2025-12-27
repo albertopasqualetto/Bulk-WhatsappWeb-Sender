@@ -2,9 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { pathToFileURL } from 'url';
+import cliProgress from 'cli-progress';
 
 import { createWAClient } from './WAClient.js';
 import { detectCompiledRuntime, resolvePuppeteerExecutablePath } from './puppeteerSetup.js';
+
+const { SingleBar, Presets } = cliProgress;
 
 const listOnly = process.argv.includes('--list');
 
@@ -33,16 +36,24 @@ async function getAllNumbers(WWebClient, { outputDir }) {
   const chats = await WWebClient.getChats();
   const contactMap = new Map();
 
+  const bar = new SingleBar({
+    format: 'Export contacts |{bar}| {value}/{total} {percentage}% | ETA: {eta_formatted} | {suffix}',
+    hideCursor: true,
+  }, Presets.shades_classic);
+  bar.start(Math.max(chats.length, 1), 0, { suffix: 'contacts:0' });
+
   for (const chat of chats) {
     // Skip group chats - only process direct chats
     if (chat.isGroup) {
       console.log(`${chat.name} is a group, skipping`);
+      bar.increment(1, { suffix: `contacts:${contactMap.size}` });
       continue;
     }
 
     const contact = await chat.getContact();
     if (!contact || !contact.id) {
       console.log('Could not get contact info for chat');
+      bar.increment(1, { suffix: `contacts:${contactMap.size}` });
       continue;
     }
 
@@ -61,7 +72,12 @@ async function getAllNumbers(WWebClient, { outputDir }) {
       contactMap.set(normalizedNumber, { name, photo });
     }
     console.log(normalizedNumber);
+
+    bar.increment(1, { suffix: `contacts:${contactMap.size}` });
   }
+
+  bar.update(bar.getTotal(), { suffix: `contacts:${contactMap.size}` });
+  bar.stop();
 
   const listWithNames = Array.from(contactMap.entries()).map(([num, details]) => ({
     num,

@@ -3,6 +3,7 @@ const { MessageMedia } = wwebpkg;
 
 import { createWAClient } from './WAClient.js';
 import fs from 'fs';
+import cliProgress from 'cli-progress';
 
 import parsePhoneNumber from 'libphonenumber-js';
 
@@ -12,6 +13,8 @@ import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const log_file = fs.createWriteStream(__dirname + '/log.txt', { flags: 'w' });
+
+const { SingleBar, Presets } = cliProgress;
 
 //Whatsapp magic
 export default function sendMessages(numbersFile, messageToSend, mediaToSend) {
@@ -38,19 +41,46 @@ export default function sendMessages(numbersFile, messageToSend, mediaToSend) {
       log(err, true);
       return;
     }
+    const bar = new SingleBar({
+      format: 'Send messages |{bar}| {value}/{total} {percentage}% | ETA: {eta_formatted} | {suffix}',
+      hideCursor: true,
+    }, Presets.shades_classic);
 
-    for (let number of numbersArr) {
-      if (number !== '') {
-        let parsed_number = parseNumber(number, myNumberCountry);
-        if (parsed_number === null) {
-          log(number + ": INVALID NUMBER", true);
-          continue;
-        }
+    let sentCount = 0;
+    let failedCount = 0;
 
-        await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);
+    const suffix = () => `sent:${sentCount} failed:${failedCount}`;
+
+    bar.start(Math.max(numbersArr.length, 1), 0, { suffix: suffix() });
+
+    for (const [idx, number] of numbersArr.entries()) {
+      let parsed_number = parseNumber(number, myNumberCountry);
+      if (parsed_number === null) {
+        failedCount += 1;
+        log(number + ": INVALID NUMBER", true);
+        bar.increment(1, { suffix: suffix() });
+        continue;
+      }
+
+      try {
+        const success = await sendEverything(client, parsed_number + "@c.us", messageToSend, mediaToSend);
+        if (success) sentCount += 1;
+        else failedCount += 1;
+      } catch (err) {
+        failedCount += 1;
+        log(err, true);
+      }
+
+      bar.increment(1, { suffix: suffix() });
+
+      const isLast = idx === numbersArr.length - 1;
+      if (!isLast) {
         await new Promise((resolve) => setTimeout(resolve, randBetween(delayms[0], delayms[1])));
       }
     }
+
+    bar.update(numbersArr.length, { suffix: suffix() });
+    bar.stop();
 
     await client.sendPresenceUnavailable();
     await client.destroy();
@@ -105,6 +135,7 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend) {
   //if number is not on Whatsapp
   if (!(await WWebClient.isRegisteredUser(chatId))) {
     log(chatId.split('@c.us')[0] + ": NOT ON WHATSAPP");
+    return false;
   }
   else {
     let thisChat = await WWebClient.getChatById(chatId);
@@ -136,6 +167,7 @@ async function sendEverything(WWebClient, chatId, messageToSend, mediaToSend) {
     }
 
     log(chatId.split('@c.us')[0] + ": SENT");
+    return true;
   }
 }
 
