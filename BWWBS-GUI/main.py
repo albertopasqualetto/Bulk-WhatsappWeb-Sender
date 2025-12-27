@@ -176,30 +176,35 @@ def start_BBWBS_cli():
         return
 
     MESSAGE = message_entry.get("1.0", "end-1c")
-    DELAY_VAR = int(delay_tk_var.get())
+    try:
+        DELAY_VAR = int(delay_tk_var.get())
+    except ValueError:
+        DELAY_VAR = 0
 
-    # string_to_run = "npm run start -- --numbers " + NUMBERS_FILE
-    string_to_run = "node ./index.js --numbers " + NUMBERS_FILE
+    args = ["npm", "run", "start", "--", "--numbers", NUMBERS_FILE]
 
-    if MESSAGE != "":
-        string_to_run += ' --message "' + MESSAGE + '"'
+    if MESSAGE:
+        args += ["--message", MESSAGE]
     else:
-        string_to_run += " --no-message"
+        args += ["--no-message"]
 
-    # TODO maybe fix file paths with spaces
     if MEDIA_TO_SEND_LIST:
-        string_to_run += ' --files '
-        for media in MEDIA_TO_SEND_LIST:
-            string_to_run += '"' + media + '" '
+        args += ["--files", *MEDIA_TO_SEND_LIST]
     else:
-        string_to_run += " --no-files "
+        args += ["--no-files"]
 
     if DELAY_VAR == -1:
-        string_to_run += " --low-delay"
+        args += ["--low-delay"]
     elif DELAY_VAR == 1:
-        string_to_run += " --high-delay"
+        args += ["--high-delay"]
 
-    subprocess.run(string_to_run, cwd=BBWWS_NODE_FOLDER)
+    try:
+        subprocess.run(args, cwd=BBWWS_NODE_FOLDER)
+    except FileNotFoundError:
+        tkmessagebox.showerror(
+            "Error",
+            "Failed to start the sender. Ensure Node.js is installed and available in PATH (the `node` command must work).",
+        )
 
 
 def export_contacts():
