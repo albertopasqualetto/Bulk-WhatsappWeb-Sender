@@ -1,5 +1,6 @@
 # Executable exports
 build/
 dist/
+*.spec
 
 __pycache__/
