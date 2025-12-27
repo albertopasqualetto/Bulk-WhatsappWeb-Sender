@@ -104,6 +104,10 @@ def check_for_updates(tk_root):
 def popup_update(tk_root):  # TODO window does not appear on top
     pop = tk.Toplevel(tk_root)
     pop.wm_title("Update available")
+    pop.transient(tk_root)
+    pop.grab_set()
+    pop.lift()
+    pop.protocol("WM_DELETE_WINDOW", pop.destroy)
 
     label_pop = ttk.Label(pop, text="A new version of Bulk-WhatsAppWeb-Sender is available!")
     label_pop.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
@@ -118,7 +122,8 @@ def popup_update(tk_root):  # TODO window does not appear on top
     ok_pop = ttk.Button(pop, text="OK", command=pop.destroy)
     ok_pop.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-    pop.mainloop()
+    pop.focus_force()
+    tk_root.wait_window(pop)
 
 
 # button commands methods
