@@ -27,7 +27,7 @@
     "@puppeteer/browsers": "^2.11.0",
     "browser-paths": "^1.1.6",
     "cli-progress": "^3.12.0",
-    "commander": "^14.0.2",
+    "commander": "^15.0.0",
     "inquirer": "^9.3.7",
     "inquirer-file-tree-selection-prompt": "^2.0.5",
     "libphonenumber-js": "^1.12.33",
