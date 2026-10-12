@@ -14,6 +14,7 @@ import subprocess
 import threading
 
 import requests
+import certifi
 import webbrowser
 
 
@@ -158,6 +159,7 @@ def check_for_updates(tk_root):
                 'https://api.github.com/repos/albertopasqualetto/Bulk-WhatsappWeb-Sender/releases/latest',
                 headers={"User-Agent": "BWWBS-GUI"},
                 timeout=5,
+                verify=certifi.where(),
             )
             if response.status_code != 200:
                 return
