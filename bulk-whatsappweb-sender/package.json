@@ -33,7 +33,7 @@
     "libphonenumber-js": "^1.12.33",
     "mime-types": "^3.0.2",
     "press-any-key": "^1.1.0",
-    "puppeteer-core": "^24.34.0",
+    "puppeteer-core": "^25.10.0",
     "qrcode-terminal": "0.12.0",
     "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#main"
   }
